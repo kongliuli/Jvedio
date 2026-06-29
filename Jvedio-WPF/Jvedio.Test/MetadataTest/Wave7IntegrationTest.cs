@@ -45,8 +45,6 @@ namespace Jvedio.Test.MetadataTest
         {
             Assert.AreEqual(TabType.GeoVideo, TabTypeExtensions.PrimaryListTabType(DataType.Video));
             Assert.AreEqual(TabType.GeoPicture, TabTypeExtensions.PrimaryListTabType(DataType.Picture));
-            Assert.AreEqual(TabType.GeoPicture, TabTypeExtensions.PrimaryListTabType(DataType.Comics));
-            Assert.AreEqual(TabType.GeoGame, TabTypeExtensions.PrimaryListTabType(DataType.Game));
         }
 
         [TestMethod]

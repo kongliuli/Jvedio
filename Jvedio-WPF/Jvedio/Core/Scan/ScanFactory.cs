@@ -14,17 +14,10 @@ namespace Jvedio.Core.Scan
         static ScanFactory()
         {
             Register(DataType.Video, ctx => new ScanTask(ctx));
-            Register(DataType.Game, ctx => new GameScan(ctx));
             Register(DataType.Picture, ctx => {
                 if (ctx.FileExt == null)
                     ctx.FileExt = ScanExtensions.PICTURE_EXTENSIONS_LIST;
                 return new PictureScan(ctx);
-            });
-            Register(DataType.Comics, ctx => {
-                if (ctx.FileExt == null)
-                    ctx.FileExt = ScanExtensions.PICTURE_EXTENSIONS_LIST;
-                ctx.DataType = DataType.Comics;
-                return new ComicScan(ctx);
             });
         }
 

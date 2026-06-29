@@ -19,26 +19,20 @@ namespace Jvedio.Core.UI
     {
         public static SettingsSectionMask ForDataType(DataType dataType)
         {
-            switch (dataType) {
-                case DataType.Picture:
-                case DataType.Comics:
-                    return SettingsSectionMask.Scan
-                        | SettingsSectionMask.PicturePaths
-                        | SettingsSectionMask.Rename
-                        | SettingsSectionMask.ThemeHotkey;
-                case DataType.Game:
-                    return SettingsSectionMask.Scan
-                        | SettingsSectionMask.Rename
-                        | SettingsSectionMask.ThemeHotkey;
-                default:
-                    return SettingsSectionMask.Scan
-                        | SettingsSectionMask.NfoFfmpeg
-                        | SettingsSectionMask.PlayerScreenshot
-                        | SettingsSectionMask.Crawler
-                        | SettingsSectionMask.PicturePaths
-                        | SettingsSectionMask.Rename
-                        | SettingsSectionMask.ThemeHotkey;
+            if (dataType == DataType.Picture) {
+                return SettingsSectionMask.Scan
+                    | SettingsSectionMask.PicturePaths
+                    | SettingsSectionMask.Rename
+                    | SettingsSectionMask.ThemeHotkey;
             }
+
+            return SettingsSectionMask.Scan
+                | SettingsSectionMask.NfoFfmpeg
+                | SettingsSectionMask.PlayerScreenshot
+                | SettingsSectionMask.Crawler
+                | SettingsSectionMask.PicturePaths
+                | SettingsSectionMask.Rename
+                | SettingsSectionMask.ThemeHotkey;
         }
 
         public static bool HasSection(this SettingsSectionMask mask, SettingsSectionMask section)

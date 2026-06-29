@@ -292,20 +292,7 @@ namespace Jvedio
 
         private async Task<bool> MoveOldFiles()
         {
-            // 迁移公共数据
-            Jvedio4ToJvedio5.MoveAI();
-            string[] files = FileHelper.TryScanDIr(oldDataPath, "*.sqlite", SearchOption.TopDirectoryOnly);
-            bool success = await Jvedio4ToJvedio5.MoveDatabases(files);
-            if (success && files != null && files.Length > 0) {
-                Jvedio4ToJvedio5.MoveRecentWatch();
-                Jvedio4ToJvedio5.MoveMagnets();
-                Jvedio4ToJvedio5.MoveTranslate();
-                Jvedio4ToJvedio5.MoveMyList();
-                Jvedio4ToJvedio5.MoveScanPathConfig(files);
-                ConfigManager.Settings.OpenDataBaseDefault = false;
-            }
-
-            // 移动文件
+            // 移动旧版安装目录下的散落文件（不含 4→5 数据库迁移）
             string targetDir = Path.Combine(AllOldDataPath, "DataBase");
             if (Directory.Exists(targetDir))
                 DirHelper.TryDelete(targetDir);

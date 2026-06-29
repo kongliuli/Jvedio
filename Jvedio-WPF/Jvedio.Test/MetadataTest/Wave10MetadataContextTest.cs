@@ -20,8 +20,8 @@ namespace Jvedio.Test.MetadataTest
         {
             DataType before = LibraryRuntime.CurrentDataType;
             try {
-                LibraryRuntime.SetCurrent(DataType.Game);
-                Assert.AreEqual(DataType.Game, LibraryRuntime.CurrentDataType);
+                LibraryRuntime.SetCurrent(DataType.Picture);
+                Assert.AreEqual(DataType.Picture, LibraryRuntime.CurrentDataType);
             } finally {
                 LibraryRuntime.SetCurrent(before);
             }
@@ -86,16 +86,16 @@ namespace Jvedio.Test.MetadataTest
         }
 
         [TestMethod]
-        public void GetGenreList_GameDataType_ReturnsEmptyWithoutDb()
+        public void GetGenreList_PictureDataType_ReturnsEmptyWithoutDb()
         {
-            List<string> game = SideMenuLabelQueries.GetGenreList(DataType.Game, string.Empty);
-            Assert.IsNotNull(game);
+            List<string> genres = SideMenuLabelQueries.GetGenreList(DataType.Picture, string.Empty);
+            Assert.IsNotNull(genres);
         }
 
         [TestMethod]
-        public void GetListByField_GameSeries_DoesNotThrow()
+        public void GetListByField_PictureSeries_DoesNotThrow()
         {
-            List<string> list = SideMenuLabelQueries.GetListByField(DataType.Game, "Series", string.Empty);
+            List<string> list = SideMenuLabelQueries.GetListByField(DataType.Picture, "Series", string.Empty);
             Assert.IsNotNull(list);
         }
     }

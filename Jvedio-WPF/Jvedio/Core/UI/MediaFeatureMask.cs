@@ -19,8 +19,6 @@ namespace Jvedio.Core.UI
                 case DataType.Video:
                     return MediaFeatureMask.AddMovie;
                 case DataType.Picture:
-                case DataType.Game:
-                case DataType.Comics:
                     return MediaFeatureMask.AddMediaPath;
                 default:
                     return MediaFeatureMask.None;
@@ -35,10 +33,7 @@ namespace Jvedio.Core.UI
                 case "AddMovie":
                     return mask.HasFlag(MediaFeatureMask.AddMovie);
                 case "AddMediaPath":
-                case "AddGamePath":
                 case "AddPicturePath":
-                    return mask.HasFlag(MediaFeatureMask.AddMediaPath);
-                case "AddGamePathOnly":
                     return mask.HasFlag(MediaFeatureMask.AddMediaPath);
                 default:
                     return true;
@@ -52,9 +47,9 @@ namespace Jvedio.Core.UI
             if (feature == "ImportVideoHello")
                 return dataType == DataType.Video;
             if (feature == "AddGamePathOnly")
-                return dataType == DataType.Game;
+                return false;
             if (feature == "AddPicturePathOnly")
-                return dataType == DataType.Picture || dataType == DataType.Comics;
+                return dataType == DataType.Picture;
             return MediaFeatureMaskExtensions.ForDataType(dataType).HasFeature(feature);
         }
     }

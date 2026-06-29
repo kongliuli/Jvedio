@@ -6,24 +6,15 @@ namespace Jvedio.Core.UI
     {
         Video,
         Picture,
-        Game,
-        Comics,
     }
 
     public static class MediaListModeExtensions
     {
         public static MediaListMode FromDataType(DataType dataType)
         {
-            switch (dataType) {
-                case DataType.Picture:
-                    return MediaListMode.Picture;
-                case DataType.Game:
-                    return MediaListMode.Game;
-                case DataType.Comics:
-                    return MediaListMode.Comics;
-                default:
-                    return MediaListMode.Video;
-            }
+            if (dataType == DataType.Picture)
+                return MediaListMode.Picture;
+            return MediaListMode.Video;
         }
     }
 }

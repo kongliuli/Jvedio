@@ -126,19 +126,17 @@ namespace Jvedio.Test.UITest
         [TestMethod]
         public void Checklist_NonVideo_NoCrawlerTab()
         {
-            foreach (DataType dataType in new[] { DataType.Game, DataType.Picture, DataType.Comics }) {
+            foreach (DataType dataType in new[] { DataType.Picture }) {
                 SettingsSectionMask mask = MediaUIHost.GetSettingsSections(dataType);
                 Assert.IsFalse(mask.HasSection(SettingsSectionMask.Crawler), dataType.ToString());
             }
         }
 
         [TestMethod]
-        public void Checklist_PictureComics_PicturePathsVisible()
+        public void Checklist_Picture_PicturePathsVisible()
         {
-            foreach (DataType dataType in new[] { DataType.Picture, DataType.Comics }) {
-                SettingsSectionMask mask = MediaUIHost.GetSettingsSections(dataType);
-                Assert.IsTrue(mask.HasSection(SettingsSectionMask.PicturePaths), dataType.ToString());
-            }
+            SettingsSectionMask mask = MediaUIHost.GetSettingsSections(DataType.Picture);
+            Assert.IsTrue(mask.HasSection(SettingsSectionMask.PicturePaths));
         }
 
         [TestMethod]
@@ -151,7 +149,7 @@ namespace Jvedio.Test.UITest
         }
 
         [TestMethod]
-        public void Checklist_AllFourLibraries_FullPipeline()
+        public void Checklist_BothLibraries_FullPipeline()
         {
             foreach (DataType dataType in MediaTypeSmokeValidator.LibraryTypes)
                 MediaTypeSmokeValidator.AssertFullSmoke(dataType);

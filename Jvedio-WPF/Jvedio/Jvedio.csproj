@@ -387,7 +387,6 @@
     <Compile Include="Core\Rename\RenameEngine.cs" />
     <Compile Include="Core\Tasks\IBackgroundTask.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
-    <Compile Include="Core\Enums\ComicType.cs" />
     <Compile Include="Core\Enums\DataBaseType.cs" />
     <Compile Include="Core\Enums\DataType.cs" />
     <Compile Include="Core\Enums\Gender.cs" />
@@ -437,9 +436,6 @@
     <Compile Include="Core\UserControls\VideoList.ContextMenu.partial.cs">
       <DependentUpon>VideoList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Core\UserControls\GameSideMenu.xaml.cs">
-      <DependentUpon>GameSideMenu.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Core\UserControls\PictureSideMenu.xaml.cs">
       <DependentUpon>PictureSideMenu.xaml</DependentUpon>
     </Compile>
@@ -456,13 +452,9 @@
     <Compile Include="Mapper\MapperManager.cs" />
     <Compile Include="CustomStyle\StyleManager.cs" />
     <Compile Include="Core\Plugins\Crawler\CrawlerInfo.cs" />
-    <Compile Include="Core\Scan\ComicScan.cs" />
     <Compile Include="Core\Scan\ExistVideoIndex.cs" />
-    <Compile Include="Core\Scan\GameScan.cs" />
-    <Compile Include="Core\Scan\GameScanPipeline.cs" />
     <Compile Include="Core\Scan\HashPathImportClassifier.cs" />
     <Compile Include="Core\Scan\HashPathIndex.cs" />
-    <Compile Include="Core\Scan\IGameScanStore.cs" />
     <Compile Include="Core\Scan\ImportClassification.cs" />
     <Compile Include="Core\Scan\IPictureScanStore.cs" />
     <Compile Include="Core\Scan\IVideoScanStore.cs" />
@@ -510,8 +502,6 @@
     <Compile Include="Entity\CommonSQL\CommonImage.cs" />
     <Compile Include="Entity\CommonSQL\TagStamp.cs" />
     <Compile Include="Entity\Data\MetaData.cs" />
-    <Compile Include="Entity\Data\Comic.cs" />
-    <Compile Include="Entity\Data\Game.cs" />
     <Compile Include="Entity\Data\Picture.cs" />
     <Compile Include="Entity\Data\UrlCode.cs" />
     <Compile Include="Entity\Data\Video.cs" />
@@ -538,8 +528,6 @@
     <Compile Include="Mapper\Common\AIFaceMapper.cs" />
     <Compile Include="Mapper\Common\AppConfigMapper.cs" />
     <Compile Include="Mapper\Common\AppDatabaseMapper.cs" />
-    <Compile Include="Mapper\Common\GameMapper.cs" />
-    <Compile Include="Mapper\Common\ComicMapper.cs" />
     <Compile Include="Mapper\Common\TagStampMapper.cs" />
     <Compile Include="Mapper\Common\SearchHistoryMapper.cs" />
     <Compile Include="Mapper\Common\ComImagesMapper.cs" />
@@ -549,7 +537,6 @@
     <Compile Include="Mapper\Common\UrlCodeMapper.cs" />
     <Compile Include="Mapper\Common\PictureMapper.cs" />
     <Compile Include="Mapper\Common\VideoMapper.cs" />
-    <Compile Include="Upgrade\Jvedio4ToJvedio5.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -689,10 +676,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Core\UserControls\VideoList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Core\UserControls\GameSideMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -873,8 +856,6 @@
     <Content Include="Reference\JvedioLib.dll" />
     <Resource Include="Resources\Picture\asso.png" />
     <Content Include="Data\Sql\app_cache.sql" />
-    <Content Include="Data\Sql\single_db_comic.sql" />
-    <Content Include="Data\Sql\single_db_game.sql" />
     <Content Include="Data\Sql\single_db_picture.sql" />
     <Resource Include="Resources\Picture\plugin.png" />
     <None Include="AvalonEdit\Highlighting\TaskLogRule.xshd">

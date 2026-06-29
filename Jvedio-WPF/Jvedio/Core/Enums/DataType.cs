@@ -4,7 +4,5 @@
     {
         Video,
         Picture,
-        Game,
-        Comics,
     }
 }

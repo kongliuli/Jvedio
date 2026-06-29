@@ -8,9 +8,10 @@ namespace Jvedio.Test.UITest
     public class StartupLibraryMappingTest
     {
         [TestMethod]
-        public void ResolveDataType_UsesStoredDataTypeWhenValid()
+        public void ResolveDataType_IgnoresLegacyStoredTypes()
         {
-            Assert.AreEqual(DataType.Game, StartupLibraryMapping.ResolveDataType(0, (int)DataType.Game));
+            Assert.AreEqual(DataType.Video, StartupLibraryMapping.ResolveDataType(0, StartupLibraryMapping.LegacyGameDataType));
+            Assert.AreEqual(DataType.Picture, StartupLibraryMapping.ResolveDataType(1, StartupLibraryMapping.LegacyComicsDataType));
         }
 
         [TestMethod]

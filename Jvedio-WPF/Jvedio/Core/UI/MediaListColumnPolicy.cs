@@ -30,14 +30,7 @@ namespace Jvedio.Core.UI
             switch (mode) {
                 case MediaListMode.Video:
                     return column != MediaListColumn.Genre && column != MediaListColumn.Series;
-                case MediaListMode.Game:
-                    return column == MediaListColumn.Operate
-                        || column == MediaListColumn.Path
-                        || column == MediaListColumn.Genre
-                        || column == MediaListColumn.Series
-                        || column == MediaListColumn.LastScanDate;
                 case MediaListMode.Picture:
-                case MediaListMode.Comics:
                     return column == MediaListColumn.Operate
                         || column == MediaListColumn.Path
                         || column == MediaListColumn.Size

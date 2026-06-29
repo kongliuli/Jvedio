@@ -12,16 +12,13 @@ using System.Collections.Generic;
 namespace Jvedio.Test.UITest
 {
     /// <summary>
-    /// 四库类型冒烟校验：侧栏 Profile → TabType → 列表模式 → 扫描器 → TaskHub。
-    /// ponytail: 无 WPF/Appium 的可重复单测；完整 UI 自动化见 <see cref="FourDataTypeAppiumSmokeTest"/>。
+    /// 双库类型冒烟校验：侧栏 Profile → TabType → 列表模式 → 扫描器 → TaskHub。
     /// </summary>
     internal static class MediaTypeSmokeValidator
     {
         private static readonly DataType[] AllLibraryTypes = {
             DataType.Video,
             DataType.Picture,
-            DataType.Game,
-            DataType.Comics,
         };
 
         public static IReadOnlyList<DataType> LibraryTypes => AllLibraryTypes;
@@ -61,15 +58,6 @@ namespace Jvedio.Test.UITest
                     Assert.AreEqual(MediaListMode.Picture, listMode);
                     Assert.IsFalse(MediaUIHost.GetProfile(dataType).UseVideoDetailsWindow);
                     break;
-                case DataType.Comics:
-                    Assert.AreEqual(TabType.GeoPicture, primary);
-                    Assert.AreEqual(MediaListMode.Comics, listMode);
-                    break;
-                case DataType.Game:
-                    Assert.AreEqual(TabType.GeoGame, primary);
-                    Assert.AreEqual(MediaListMode.Game, listMode);
-                    Assert.IsFalse(MediaUIHost.GetProfile(dataType).UseVideoDetailsWindow);
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataType));
             }
@@ -89,12 +77,6 @@ namespace Jvedio.Test.UITest
                     break;
                 case DataType.Picture:
                     Assert.IsInstanceOfType(job, typeof(PictureScan));
-                    break;
-                case DataType.Comics:
-                    Assert.IsInstanceOfType(job, typeof(ComicScan));
-                    break;
-                case DataType.Game:
-                    Assert.IsInstanceOfType(job, typeof(GameScan));
                     break;
             }
         }
@@ -148,23 +130,10 @@ namespace Jvedio.Test.UITest
         }
 
         [TestMethod]
-        public void Game_FullSmokePass()
+        public void LegacyStoredTypes_FallBackToSideIndex()
         {
-            MediaTypeSmokeValidator.AssertFullSmoke(DataType.Game);
-        }
-
-        [TestMethod]
-        public void Comics_FullSmokePass()
-        {
-            MediaTypeSmokeValidator.AssertFullSmoke(DataType.Comics);
-        }
-
-        [TestMethod]
-        public void Comics_UsesPictureSideNavigation()
-        {
-            Assert.AreSame(
-                MediaUIHost.GetProfile(DataType.Picture).CreateSideNavigation(),
-                MediaUIHost.GetProfile(DataType.Comics).CreateSideNavigation());
+            Assert.AreEqual(DataType.Video, StartupLibraryMapping.ResolveDataType(0, StartupLibraryMapping.LegacyGameDataType));
+            Assert.AreEqual(DataType.Picture, StartupLibraryMapping.ResolveDataType(1, StartupLibraryMapping.LegacyComicsDataType));
         }
 
         [TestMethod]
@@ -172,7 +141,7 @@ namespace Jvedio.Test.UITest
         {
             Assert.AreNotSame(
                 MediaUIHost.GetProfile(DataType.Video).CreateTabFactory(),
-                MediaUIHost.GetProfile(DataType.Game).CreateTabFactory());
+                MediaUIHost.GetProfile(DataType.Picture).CreateTabFactory());
         }
     }
 }

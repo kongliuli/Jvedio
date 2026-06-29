@@ -24,9 +24,9 @@ namespace Jvedio.Test.MetadataTest
                     notified = true;
             };
             try {
-                LibraryContext.Apply(DataType.Game);
+                LibraryContext.Apply(DataType.Picture);
                 Assert.IsTrue(notified);
-                Assert.AreEqual(DataType.Game, LibraryContextBinding.Instance.CurrentDataType);
+                Assert.AreEqual(DataType.Picture, LibraryContextBinding.Instance.CurrentDataType);
             } finally {
                 LibraryContext.Apply(before);
             }

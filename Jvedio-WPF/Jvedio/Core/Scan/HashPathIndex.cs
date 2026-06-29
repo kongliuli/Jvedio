@@ -92,22 +92,6 @@ namespace Jvedio.Core.Scan
         }
     }
 
-    internal sealed class ExistGameIndex : IHashPathIndex<Game>
-    {
-        private readonly HashPathIndex<Game> _index;
-
-        public ExistGameIndex(IEnumerable<Game> games)
-        {
-            _index = new HashPathIndex<Game>(games, g => g.Path, g => g.Hash);
-        }
-
-        public bool HasSamePathAndHash(Game game) => _index.HasSamePathAndHash(game, g => g.Path, g => g.Hash);
-        public Game FindSameHashDifferentPath(Game game) => _index.FindSameHashDifferentPath(game, g => g.Path, g => g.Hash);
-        public bool HasSameHashDifferentPath(Game game) => _index.HasSameHashDifferentPath(game, g => g.Path, g => g.Hash);
-        public Game FindSamePathDifferentHash(Game game) => _index.FindSamePathDifferentHash(game, g => g.Path, g => g.Hash);
-        public bool HasSamePathDifferentHash(Game game) => _index.HasSamePathDifferentHash(game, g => g.Path, g => g.Hash);
-    }
-
     internal sealed class ExistPictureIndex : IHashPathIndex<Picture>
     {
         private readonly HashPathIndex<Picture> _index;

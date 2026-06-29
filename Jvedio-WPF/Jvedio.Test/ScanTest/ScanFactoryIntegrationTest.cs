@@ -12,9 +12,7 @@ namespace Jvedio.Test.ScanTest
         public void ProduceScanner_AllDataTypes_ReturnScanJobBase()
         {
             Assert.IsInstanceOfType(ScanFactory.ProduceScanner(DataType.Video, new List<string>(), new List<string>()), typeof(ScanTask));
-            Assert.IsInstanceOfType(ScanFactory.ProduceScanner(DataType.Game, new List<string>(), null), typeof(GameScan));
             Assert.IsInstanceOfType(ScanFactory.ProduceScanner(DataType.Picture, new List<string>(), null), typeof(PictureScan));
-            Assert.IsInstanceOfType(ScanFactory.ProduceScanner(DataType.Comics, new List<string>(), null), typeof(ComicScan));
         }
 
         [TestMethod]

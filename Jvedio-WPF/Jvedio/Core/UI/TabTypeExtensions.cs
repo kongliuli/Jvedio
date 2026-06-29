@@ -8,15 +8,9 @@ namespace Jvedio.Core.UI
         /// <summary>当前库类型的「全部」列表 Tab；GeoVideo 为 Video 别名。</summary>
         public static TabType PrimaryListTabType(DataType dataType)
         {
-            switch (dataType) {
-                case DataType.Picture:
-                case DataType.Comics:
-                    return TabType.GeoPicture;
-                case DataType.Game:
-                    return TabType.GeoGame;
-                default:
-                    return TabType.GeoVideo;
-            }
+            if (dataType == DataType.Picture)
+                return TabType.GeoPicture;
+            return TabType.GeoVideo;
         }
 
         /// <summary>GeoVideo 与 Profile 主 Tab 视为同一语义（旧 Tab 兼容）。</summary>

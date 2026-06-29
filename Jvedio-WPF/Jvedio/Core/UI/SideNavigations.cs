@@ -15,15 +15,9 @@ namespace Jvedio.Core.UI
     {
         public static ISideNavigation ForDataType(DataType dataType)
         {
-            switch (dataType) {
-                case DataType.Picture:
-                case DataType.Comics:
-                    return PictureSideNavigation.Instance;
-                case DataType.Game:
-                    return GameSideNavigation.Instance;
-                default:
-                    return VideoSideNavigation.Instance;
-            }
+            if (dataType == DataType.Picture)
+                return PictureSideNavigation.Instance;
+            return VideoSideNavigation.Instance;
         }
 
         private static void AddRecentWatch(VieModel_Main vm, SelectWrapper<Video> wrapper, string tabTitle)
@@ -85,39 +79,6 @@ namespace Jvedio.Core.UI
                 switch (param) {
                     case "All":
                         vm.TabItemManager.Add(TabType.GeoPicture, LangManager.GetValueByKey("AllPicture"), wrapper);
-                        break;
-                    case "Favorite":
-                        wrapper.Gt("metadata.Grade", 0);
-                        vm.TabItemManager.Add(TabType.GeoStar, LangManager.GetValueByKey("Favorites"), wrapper);
-                        break;
-                    case "RecentWatch":
-                        AddRecentWatch(vm, wrapper, LangManager.GetValueByKey("RecentView"));
-                        break;
-                    case "Label":
-                        vm.TabItemManager.Add(TabType.GeoLabel, LangManager.GetValueByKey("Label"), LabelType.LabelName, vm.SearchText);
-                        break;
-                    case "Genre":
-                    case "Series":
-                        if (Enum.TryParse(param, out LabelType type))
-                            vm.TabItemManager.Add(TabType.GeoLabel, LangManager.GetValueByKey(param), type, vm.SearchText);
-                        break;
-                }
-            }
-        }
-
-        internal sealed class GameSideNavigation : ISideNavigation
-        {
-            public static GameSideNavigation Instance { get; } = new GameSideNavigation();
-
-            public void Handle(VieModel_Main vm, object command)
-            {
-                if (vm == null || command == null)
-                    return;
-                string param = command.ToString();
-                SelectWrapper<Video> wrapper = new SelectWrapper<Video>();
-                switch (param) {
-                    case "All":
-                        vm.TabItemManager.Add(TabType.GeoGame, LangManager.GetValueByKey("AllVideo"), wrapper);
                         break;
                     case "Favorite":
                         wrapper.Gt("metadata.Grade", 0);

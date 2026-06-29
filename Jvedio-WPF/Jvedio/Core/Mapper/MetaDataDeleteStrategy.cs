@@ -11,13 +11,9 @@ namespace Jvedio.Core.Mapper
             if (idList == null || idList.Count == 0)
                 return 0;
 
-            int c2 = 0;
+            int c2;
             if (dataType == DataType.Picture)
                 c2 = MapperManager.pictureMapper.DeleteByIds(idList);
-            else if (dataType == DataType.Comics)
-                c2 = MapperManager.comicMapper.DeleteByIds(idList);
-            else if (dataType == DataType.Game)
-                c2 = MapperManager.gameMapper.DeleteByIds(idList);
             else
                 c2 = metadataDeletedCount;
 
@@ -27,7 +23,7 @@ namespace Jvedio.Core.Mapper
 
         private static void ExecuteRelationCleanup(List<string> idList, DataType dataType)
         {
-            if (dataType != DataType.Picture && dataType != DataType.Comics && dataType != DataType.Game)
+            if (dataType != DataType.Picture)
                 return;
 
             string ids = string.Join(",", idList);
@@ -38,13 +34,7 @@ namespace Jvedio.Core.Mapper
             builder.Append($"delete from metadata_to_actor where DataID in ({ids});");
             builder.Append($"delete from metadata_to_label where DataID in ({ids});");
             builder.Append("commit;");
-
-            if (dataType == DataType.Picture)
-                MapperManager.pictureMapper.ExecuteNonQuery(builder.ToString());
-            else if (dataType == DataType.Comics)
-                MapperManager.comicMapper.ExecuteNonQuery(builder.ToString());
-            else if (dataType == DataType.Game)
-                MapperManager.gameMapper.ExecuteNonQuery(builder.ToString());
+            MapperManager.pictureMapper.ExecuteNonQuery(builder.ToString());
         }
     }
 }

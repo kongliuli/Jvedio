@@ -38,12 +38,8 @@ namespace Jvedio.Core.Scan
             if (toUpdateData.Count > 0)
                 metaDataMapper.UpdateBatch(toUpdateData, "Title", "Size", "Hash", "Path", "LastScanDate");
 
-            if (classification.ToUpdate.Count > 0) {
-                if (dataType == DataType.Picture)
-                    pictureMapper.UpdateBatch(classification.ToUpdate, "PicCount", "PicPaths", "VideoPaths");
-                else if (dataType == DataType.Comics)
-                    comicMapper.UpdateBatch(classification.ToUpdate.Select(arg => arg.toSimpleComic()).ToList(), "PicCount", "PicPaths");
-            }
+            if (classification.ToUpdate.Count > 0)
+                pictureMapper.UpdateBatch(classification.ToUpdate, "PicCount", "PicPaths", "VideoPaths");
 
             List<Picture> toInsert = classification.ToInsert;
             foreach (Picture data in toInsert) {
@@ -73,20 +69,12 @@ namespace Jvedio.Core.Scan
             }
 
             try {
-                if (dataType == DataType.Picture) {
-                    pictureMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
-                    pictureMapper.InsertBatch(toInsert);
-                } else if (dataType == DataType.Comics) {
-                    comicMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
-                    comicMapper.InsertBatch(toInsert.Select(arg => arg.toSimpleComic()).ToList());
-                }
+                pictureMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
+                pictureMapper.InsertBatch(toInsert);
             } catch (System.Exception ex) {
                 Logger.Error(ex.Message);
             } finally {
-                if (dataType == DataType.Picture)
-                    pictureMapper.ExecuteNonQuery("END TRANSACTION;");
-                else if (dataType == DataType.Comics)
-                    comicMapper.ExecuteNonQuery("END TRANSACTION;");
+                pictureMapper.ExecuteNonQuery("END TRANSACTION;");
             }
         }
     }

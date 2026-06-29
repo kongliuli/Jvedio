@@ -26,18 +26,18 @@ namespace Jvedio.Test.MetadataTest
         }
 
         [TestMethod]
-        public void NonVideoMetadataEngine_Game_ReadsWebUrl()
+        public void NonVideoMetadataEngine_Picture_ReadsGenre()
         {
-            var game = new Game { Title = "G1", WebUrl = "http://example/game" };
-            Dictionary<string, object> fields = NonVideoMetadataEngine.ReadLocalFields(game, DataType.Game);
+            var picture = new Picture { Title = "P1", Genre = "Art" };
+            Dictionary<string, object> fields = NonVideoMetadataEngine.ReadLocalFields(picture, DataType.Picture);
             Assert.IsNotNull(fields);
-            Assert.AreEqual("http://example/game", fields["WebUrl"]);
+            Assert.AreEqual("Art", fields["Genre"]);
         }
 
         [TestMethod]
-        public void StartupLibraryMapping_ResolveDataType_PrefersStored()
+        public void StartupLibraryMapping_ResolveDataType_IgnoresLegacyStored()
         {
-            Assert.AreEqual(DataType.Game, StartupLibraryMapping.ResolveDataType(0, (int)DataType.Game));
+            Assert.AreEqual(DataType.Video, StartupLibraryMapping.ResolveDataType(0, StartupLibraryMapping.LegacyGameDataType));
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace Jvedio.Test.MetadataTest
         [TestMethod]
         public void SettingsSectionMask_AllTypes_HaveScanSection()
         {
-            foreach (DataType t in new[] { DataType.Video, DataType.Picture, DataType.Game, DataType.Comics }) {
+            foreach (DataType t in new[] { DataType.Video, DataType.Picture }) {
                 Assert.IsTrue(MediaUIHost.GetSettingsSections(t).HasSection(SettingsSectionMask.Scan),
                     t.ToString());
             }

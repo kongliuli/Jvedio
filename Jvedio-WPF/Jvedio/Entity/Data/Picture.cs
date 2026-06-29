@@ -38,22 +38,5 @@ namespace Jvedio.Entity.Data
             metaData.DataID = this.DataID;
             return metaData;
         }
-
-        public Comic toSimpleComic()
-        {
-            Comic comic = new Comic();
-            comic.DataID = this.DataID;
-            comic.LastScanDate = this.LastScanDate;
-            comic.FirstScanDate = this.FirstScanDate;
-            comic.PicCount = this.PicCount;
-            comic.PicPaths = this.PicPaths;
-            comic.DBId = this.DBId;
-            comic.DataType = DataType.Comics;
-            comic.Title = this.Title;
-            comic.Path = this.Path;
-            comic.Size = this.Size;
-            comic.Hash = this.Hash;
-            return comic;
-        }
     }
 }

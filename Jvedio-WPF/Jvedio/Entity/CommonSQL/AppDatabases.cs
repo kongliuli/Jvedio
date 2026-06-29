@@ -1,5 +1,5 @@
-﻿
-using Jvedio.Core.Enums;
+﻿using Jvedio.Core.Enums;
+using Jvedio.Core.Library;
 using Jvedio.Core.Exceptions;
 using Jvedio.Core.Global;
 using SuperUtils.Framework.ORM.Attributes;
@@ -111,19 +111,21 @@ namespace Jvedio.Entity
             return this.DataType.GetHashCode() + this.Name.GetHashCode();
         }
 
-        static Dictionary<DataType, string> typeDict = new Dictionary<DataType, string>()
+        private static readonly Dictionary<int, string> TypeTableByInt = new Dictionary<int, string>()
         {
-            { DataType.Video, "metadata_video" },
-            { DataType.Comics, "metadata_comic" },
-            { DataType.Game, "metadata_game" },
-            { DataType.Picture, "metadata_picture" },
+            { (int)DataType.Video, "metadata_video" },
+            { (int)DataType.Picture, "metadata_picture" },
+            { StartupLibraryMapping.LegacyGameDataType, "metadata_game" },
+            { StartupLibraryMapping.LegacyComicsDataType, "metadata_comic" },
         };
 
         public void deleteByID(long id)
         {
+            if (!TypeTableByInt.TryGetValue((int)DataType, out string typeTable))
+                return;
             StringBuilder builder = new StringBuilder();
             builder.Append("begin;");
-            builder.Append($"delete from {typeDict[DataType]} where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
+            builder.Append($"delete from {typeTable} where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
             builder.Append($"delete from metadata_to_tagstamp where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
             builder.Append($"delete from metadata_to_actor where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
             builder.Append($"delete from metadata_to_label where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");

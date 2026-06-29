@@ -39,9 +39,9 @@ namespace Jvedio.Test.MetadataTest
         {
             DataType before = LibraryRuntime.CurrentDataType;
             try {
-                LibraryContext.Apply(DataType.Comics);
-                Assert.AreEqual(DataType.Comics, LibraryContext.Current.DataType);
-                Assert.AreEqual(DataType.Comics, LibraryRuntime.CurrentDataType);
+                LibraryContext.Apply(DataType.Picture);
+                Assert.AreEqual(DataType.Picture, LibraryContext.Current.DataType);
+                Assert.AreEqual(DataType.Picture, LibraryRuntime.CurrentDataType);
             } finally {
                 LibraryContext.Apply(before);
             }
@@ -69,9 +69,9 @@ namespace Jvedio.Test.MetadataTest
         [TestMethod]
         public async Task NonVideoMetadataEngine_ReadWithWeb_MergesLocal()
         {
-            var game = new Game { Title = "Local", WebUrl = "http://127.0.0.1:1/not-reachable" };
+            var picture = new Picture { Title = "Local" };
             Dictionary<string, object> fields = await NonVideoMetadataEngine.ReadWithWebAsync(
-                game, DataType.Game, null, null);
+                picture, DataType.Picture, null, null);
             Assert.IsNotNull(fields);
             Assert.AreEqual("Local", fields["Title"]);
         }

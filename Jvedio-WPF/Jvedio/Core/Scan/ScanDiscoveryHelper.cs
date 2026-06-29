@@ -129,12 +129,9 @@ namespace Jvedio.Core.Scan
         public static ISet<string> ExtensionFilterFor(DataType dataType, IEnumerable<string> fileExt)
         {
             switch (dataType) {
-                case DataType.Game:
-                    return new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".exe" };
                 case DataType.Video:
                     return ScanExtensions.VIDEO_EXTENSIONS_SET;
                 case DataType.Picture:
-                case DataType.Comics:
                     return null;
                 default:
                     return null;

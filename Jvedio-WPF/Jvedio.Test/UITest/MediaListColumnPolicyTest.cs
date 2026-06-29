@@ -14,14 +14,6 @@ namespace Jvedio.Test.UITest
         }
 
         [TestMethod]
-        public void GameMode_ShowsGenreSeries_HidesDuration()
-        {
-            Assert.IsTrue(MediaListColumnPolicy.IsVisible(MediaListMode.Game, MediaListColumn.Genre));
-            Assert.IsTrue(MediaListColumnPolicy.IsVisible(MediaListMode.Game, MediaListColumn.Series));
-            Assert.IsFalse(MediaListColumnPolicy.IsVisible(MediaListMode.Game, MediaListColumn.Duration));
-        }
-
-        [TestMethod]
         public void PictureMode_ShowsPathSizeImportDate()
         {
             Assert.IsTrue(MediaListColumnPolicy.IsVisible(MediaListMode.Picture, MediaListColumn.Path));

@@ -8,9 +8,21 @@ namespace Jvedio.Core.Library
         private static readonly DataType[] SideIndexToDataType = {
             DataType.Video,
             DataType.Picture,
-            DataType.Game,
-            DataType.Comics,
         };
+
+        /// <summary>legacy app_databases.DataType 整型值（已移除的库类型）。</summary>
+        public const int LegacyGameDataType = 2;
+        public const int LegacyComicsDataType = 3;
+
+        public static bool IsSupported(DataType dataType)
+        {
+            return dataType == DataType.Video || dataType == DataType.Picture;
+        }
+
+        public static bool IsLegacyStoredType(int storedDataType)
+        {
+            return storedDataType == LegacyGameDataType || storedDataType == LegacyComicsDataType;
+        }
 
         public static DataType DataTypeFromSideIndex(int sideIndex)
         {
@@ -30,7 +42,8 @@ namespace Jvedio.Core.Library
 
         public static DataType ResolveDataType(long sideIdx, int storedDataType = -1)
         {
-            if (storedDataType >= 0 && System.Enum.IsDefined(typeof(DataType), storedDataType))
+            if (storedDataType >= 0 && !IsLegacyStoredType(storedDataType)
+                && System.Enum.IsDefined(typeof(DataType), storedDataType))
                 return (DataType)storedDataType;
             return DataTypeFromSideIndex((int)sideIdx);
         }

@@ -321,22 +321,6 @@
                                 Click="ChangeDataType"
                                 Content="{DynamicResource Picture}"
                                 Style="{StaticResource SideRadioButton}" />
-
-
-                            <RadioButton
-                                Margin="0"
-                                HorizontalAlignment="Stretch"
-                                Click="ChangeDataType"
-                                Content="{DynamicResource Game}"
-                                Style="{StaticResource SideRadioButton}"
-                                Visibility="Collapsed" />
-                            <RadioButton
-                                Margin="0"
-                                HorizontalAlignment="Stretch"
-                                Click="ChangeDataType"
-                                Content="{DynamicResource Comics}"
-                                Style="{StaticResource SideRadioButton}"
-                                Visibility="Collapsed" />
                         </StackPanel>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>

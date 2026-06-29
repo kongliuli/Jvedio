@@ -74,31 +74,6 @@ namespace Jvedio.Core.UI
         }
     }
 
-    internal sealed class GameUIProfile : MediaUIProfileBase
-    {
-        public override DataType DataType => DataType.Game;
-
-        public override void InitSideMenu(Border sideMenuContainer, VieModel_Main vieModel)
-        {
-            if (sideMenuContainer == null || vieModel == null)
-                return;
-            GameSideMenu gameSideMenu = new GameSideMenu();
-            gameSideMenu.onSideButtonCmd = vieModel.HandleSideButtonCmd;
-            sideMenuContainer.Child = gameSideMenu;
-            vieModel.BindSideMenu(gameSideMenu);
-        }
-    }
-
-    internal sealed class ComicUIProfile : MediaUIProfileBase
-    {
-        public override DataType DataType => DataType.Comics;
-
-        public override void InitSideMenu(Border sideMenuContainer, VieModel_Main vieModel)
-        {
-            new PictureUIProfile().InitSideMenu(sideMenuContainer, vieModel);
-        }
-    }
-
     public static class MediaUIHost
     {
         private static readonly System.Collections.Generic.Dictionary<DataType, IMediaUIProfile> Registry =
@@ -108,8 +83,6 @@ namespace Jvedio.Core.UI
         {
             Register(DataType.Video, new VideoUIProfile());
             Register(DataType.Picture, new PictureUIProfile());
-            Register(DataType.Game, new GameUIProfile());
-            Register(DataType.Comics, new ComicUIProfile());
         }
 
         public static void Register(DataType dataType, IMediaUIProfile profile)

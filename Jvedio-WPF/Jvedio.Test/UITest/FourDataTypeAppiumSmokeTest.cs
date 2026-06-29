@@ -29,8 +29,6 @@ namespace Jvedio.Test.UITest
         [TestMethod]
         [DataRow(0, DataType.Video)]
         [DataRow(1, DataType.Picture)]
-        [DataRow(2, DataType.Game)]
-        [DataRow(3, DataType.Comics)]
         public void StartupSideIndex_OpensLibrary(int sideIndex, DataType expectedType)
         {
             DismissFirstRunDialogIfPresent();
