@@ -8,8 +8,13 @@ namespace Jvedio.Core.UI
     public static class PictureBrowseContext
     {
         public const string FolderCommandPrefix = "Folder:";
+        public const string CollectionCommandPrefix = "Collection:";
 
         public static string SelectedFolderPath { get; private set; }
+
+        public static long SelectedCollectionId { get; private set; }
+
+        public static string SelectedCollectionName { get; private set; }
 
         public static PictureBrowseMode BrowseMode =>
             (PictureBrowseMode)ConfigManager.VideoConfig.PictureBrowseMode;
@@ -18,6 +23,7 @@ namespace Jvedio.Core.UI
 
         public static void SetFolder(string fullPath)
         {
+            ClearCollection();
             SelectedFolderPath = string.IsNullOrWhiteSpace(fullPath)
                 ? null
                 : PicturePathHelper.NormalizeDir(fullPath);
@@ -29,6 +35,23 @@ namespace Jvedio.Core.UI
             if (string.IsNullOrEmpty(SelectedFolderPath))
                 return;
             SelectedFolderPath = null;
+            LibraryEventBus.RaisePictureBrowseChanged();
+        }
+
+        public static void SetCollection(long collectionId, string name = null)
+        {
+            ClearFolder();
+            SelectedCollectionId = collectionId;
+            SelectedCollectionName = name;
+            LibraryEventBus.RaisePictureBrowseChanged();
+        }
+
+        public static void ClearCollection()
+        {
+            if (SelectedCollectionId <= 0)
+                return;
+            SelectedCollectionId = 0;
+            SelectedCollectionName = null;
             LibraryEventBus.RaisePictureBrowseChanged();
         }
 
@@ -60,6 +83,17 @@ namespace Jvedio.Core.UI
                 return false;
             folderPath = text.Substring(FolderCommandPrefix.Length);
             return !string.IsNullOrWhiteSpace(folderPath);
+        }
+
+        public static bool TryParseCollectionCommand(object command, out long collectionId)
+        {
+            collectionId = 0;
+            if (command == null)
+                return false;
+            string text = command.ToString();
+            if (string.IsNullOrEmpty(text) || !text.StartsWith(CollectionCommandPrefix, StringComparison.Ordinal))
+                return false;
+            return long.TryParse(text.Substring(CollectionCommandPrefix.Length), out collectionId) && collectionId > 0;
         }
     }
 }

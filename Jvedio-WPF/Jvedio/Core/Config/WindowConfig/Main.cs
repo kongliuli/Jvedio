@@ -16,6 +16,7 @@ namespace Jvedio.Core.WindowConfig
             SideDefaultExpanded = true;
             SideClassifyExpanded = true;
             SideFolderExpanded = true;
+            SideCollectionExpanded = true;
             SideTagStampExpanded = true;
             PaginationCombobox = true;
 
@@ -58,6 +59,7 @@ namespace Jvedio.Core.WindowConfig
         public bool SideDefaultExpanded { get; set; }
         public bool SideClassifyExpanded { get; set; }
         public bool SideFolderExpanded { get; set; }
+        public bool SideCollectionExpanded { get; set; }
         public bool SideTagStampExpanded { get; set; }
 
 

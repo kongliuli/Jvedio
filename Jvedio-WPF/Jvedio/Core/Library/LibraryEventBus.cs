@@ -181,6 +181,7 @@ namespace Jvedio.Core.Library
         public static event EventHandler<SearchingChangedEventArgs> SearchingChanged;
         public static event EventHandler<WaitingChangedEventArgs> WaitingChanged;
         public static event EventHandler<PictureBrowseChangedEventArgs> PictureBrowseChanged;
+        public static event EventHandler PictureCollectionChanged;
 
         public static void RaiseScanCompleted(ScanJobBase scanJob, DataType dataType)
         {
@@ -270,6 +271,11 @@ namespace Jvedio.Core.Library
         public static void RaisePictureBrowseChanged()
         {
             PictureBrowseChanged?.Invoke(null, new PictureBrowseChangedEventArgs());
+        }
+
+        public static void RaisePictureCollectionChanged()
+        {
+            PictureCollectionChanged?.Invoke(null, EventArgs.Empty);
         }
     }
 }

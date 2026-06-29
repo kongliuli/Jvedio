@@ -62,42 +62,23 @@ CREATE INDEX IF NOT EXISTS picture_folder_node_idx_DBId_Parent ON picture_folder
 - [x] 选中目录节点 → 两种视图均限定该子树
 - [x] 保留 Genre / Author 侧栏「自动分类」及 `metadata_picture` 字段
 
+### CONV-D — Phase D：用户相册集合 `done`
+
+- [x] 表 `picture_collection` / `picture_collection_item` + Mapper
+- [x] `PictureCollectionService` CRUD + add/remove + 列表 SQL 过滤
+- [x] 侧栏「我的相册」+ 新建；点击集合过滤主列表（与目录互斥）
+- [x] Picture 列表右键「加入相册 / 从相册移除」
+- [x] 删 metadata 时清理 collection_item 引用
+
 ### CONV-F — NAS / 极空间适配（Phase C+ 设计 + 基础钩子）
 
 - [x] `NasPathHelper`：UNC/网络盘识别、极空间路径启发式、扫描建议
 - [x] 扫描入口（ScanNas/选路径）：检测 NAS 路径并提示开启目录指纹缓存
 - [x] `PictureRemoteImageService`：HTTP(S) 图片下载到本地 `Cache/PictureRemote`（远程资源预览基础）
-- [ ] 极空间 WebDAV/API 直连（需设备 API 文档）
+- [ ] 极空间 WebDAV/API 直连（需设备 API 文档）→ 见 [NAS-001-zspace-research.md](adr/NAS-001-zspace-research.md)
+- [x] NAS-001 调研文档 + 本机 13579 探测（当前不通，需客户端运行时复测）
 - [ ] Picture 列表 NAS 缩略图异步预取队列
 - [ ] 远程相册 URL 写入 `ExtraInfo` 后的批量下载任务
-
-### CONV-D — Phase D：用户相册集合
-
-```sql
-create table if not exists picture_collection (
-    CollectionID INTEGER PRIMARY KEY autoincrement,
-    DBId INTEGER NOT NULL,
-    Name TEXT NOT NULL,
-    SortOrder INT DEFAULT 0,
-    CoverPath TEXT,
-    CreateDate VARCHAR(30),
-    unique(DBId, Name)
-);
-
-create table if not exists picture_collection_item (
-    id INTEGER PRIMARY KEY autoincrement,
-    CollectionID INTEGER NOT NULL,
-    ItemType VARCHAR(20) NOT NULL,  -- folder | file | album
-    RefPath TEXT,
-    RefDataID INTEGER,
-    RefFID INTEGER,
-    SortOrder INT DEFAULT 0,
-    unique(CollectionID, ItemType, RefPath, RefDataID, RefFID)
-);
-```
-
-- [ ] 侧栏「我的相册」独立于 Label
-- [ ] 右键加入/移出集合；同一项可进多集合
 
 ### CONV-E — 测试与 QA
 
@@ -160,6 +141,7 @@ create table if not exists picture_collection_item (
 
 | 日期 | 说明 |
 |------|------|
+| 2026-06-30 | Phase D：用户相册集合 + NAS-001 极空间调研 |
 | 2026-06-30 | Phase C：Picture 目录树侧栏 + 相册/单图双视图 + NAS 基础适配 |
 | 2026-06-30 | Phase B：Picture 目录树/单图表 + 扫描管线重写 |
 | 2026-06-30 | Phase A 完成：双库收敛（删 Game/Comics/4→5 迁移），QA-001 19/19 |

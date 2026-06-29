@@ -83,5 +83,12 @@ namespace Jvedio.Core.UI
                 wrapper.Eq("metadata.Path", folderPath);
             }
         }
+
+        public static string ApplyCollectionScope(long collectionId, PictureBrowseMode mode)
+        {
+            if (collectionId <= 0)
+                return string.Empty;
+            return PictureCollectionService.BuildCollectionScopeSql(collectionId, mode);
+        }
     }
 }

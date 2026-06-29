@@ -447,6 +447,14 @@ namespace Jvedio.ViewModels
             }
         }
 
+        public void EnsurePictureListTab()
+        {
+            if (GetPrimaryMediaList() != null)
+                return;
+            SelectWrapper<Video> wrapper = new SelectWrapper<Video>();
+            Add(TabType.GeoPicture, LangManager.GetValueByKey("AllPicture"), wrapper);
+        }
+
         public void RefreshTab(int idx, int page)
         {
             if (idx < 0 || idx >= TabPanel.Children.Count)

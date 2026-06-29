@@ -23,6 +23,8 @@ namespace Jvedio
         public static PictureMapper pictureMapper { get; set; } = new PictureMapper();
         public static PictureFileMapper pictureFileMapper { get; set; } = new PictureFileMapper();
         public static PictureFolderNodeMapper pictureFolderNodeMapper { get; set; } = new PictureFolderNodeMapper();
+        public static PictureCollectionMapper pictureCollectionMapper { get; set; } = new PictureCollectionMapper();
+        public static PictureCollectionItemMapper pictureCollectionItemMapper { get; set; } = new PictureCollectionItemMapper();
         public static ActorMapper actorMapper { get; set; } = new ActorMapper();
         public static UrlCodeMapper urlCodeMapper { get; set; } = new UrlCodeMapper();
         public static AssociationMapper associationMapper { get; set; } = new AssociationMapper();
@@ -66,6 +68,8 @@ namespace Jvedio
             pictureMapper.Init();
             pictureFileMapper.Init();
             pictureFolderNodeMapper.Init();
+            pictureCollectionMapper.Init();
+            pictureCollectionItemMapper.Init();
             actorMapper.Init();
             urlCodeMapper.Init();
             associationMapper.Init();
@@ -108,6 +112,8 @@ namespace Jvedio
             pictureMapper.Dispose();
             pictureFileMapper.Dispose();
             pictureFolderNodeMapper.Dispose();
+            pictureCollectionMapper.Dispose();
+            pictureCollectionItemMapper.Dispose();
             actorMapper.Dispose();
             urlCodeMapper.Dispose();
             associationMapper.Dispose();

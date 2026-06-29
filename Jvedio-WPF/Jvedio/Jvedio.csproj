@@ -366,6 +366,8 @@
     <Compile Include="Core\UI\PictureBrowseMode.cs" />
     <Compile Include="Core\UI\PictureFolderTreeService.cs" />
     <Compile Include="Core\UI\PictureListQuery.cs" />
+    <Compile Include="Core\UI\PictureCollectionItemTypes.cs" />
+    <Compile Include="Core\UI\PictureCollectionService.cs" />
     <Compile Include="Core\UI\MediaUIHost.cs" />
     <Compile Include="Core\UI\ScanCompletionPolicy.cs" />
     <Compile Include="Core\UI\SideNavigations.cs" />
@@ -440,6 +442,9 @@
     <Compile Include="Core\UserControls\VideoList.ContextMenu.partial.cs">
       <DependentUpon>VideoList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Core\UserControls\VideoList.PictureCollection.partial.cs">
+      <DependentUpon>VideoList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Core\UserControls\PictureSideMenu.xaml.cs">
       <DependentUpon>PictureSideMenu.xaml</DependentUpon>
     </Compile>
@@ -512,6 +517,8 @@
     <Compile Include="Entity\Data\Picture.cs" />
     <Compile Include="Entity\Data\PictureFile.cs" />
     <Compile Include="Entity\Data\PictureFolderNode.cs" />
+    <Compile Include="Entity\Data\PictureCollection.cs" />
+    <Compile Include="Entity\Data\PictureCollectionItem.cs" />
     <Compile Include="Entity\Data\UrlCode.cs" />
     <Compile Include="Entity\Data\Video.cs" />
     <Compile Include="Entity\Common\DetailMovie.cs" />
@@ -547,6 +554,8 @@
     <Compile Include="Mapper\Common\PictureMapper.cs" />
     <Compile Include="Mapper\Common\PictureFileMapper.cs" />
     <Compile Include="Mapper\Common\PictureFolderNodeMapper.cs" />
+    <Compile Include="Mapper\Common\PictureCollectionMapper.cs" />
+    <Compile Include="Mapper\Common\PictureCollectionItemMapper.cs" />
     <Compile Include="Mapper\Common\VideoMapper.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

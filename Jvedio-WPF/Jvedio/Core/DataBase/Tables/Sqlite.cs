@@ -417,6 +417,32 @@ namespace Jvedio.Core.DataBase.Tables
                     "); " +
                     "CREATE INDEX IF NOT EXISTS picture_folder_node_idx_DBId_Parent ON picture_folder_node (DBId, ParentPath); " +
                     "COMMIT;");
+                TABLES.Add("picture_collection",
+                    "BEGIN; " +
+                    "create table if not exists picture_collection( " +
+                        "CollectionID INTEGER PRIMARY KEY autoincrement, " +
+                        "DBId INTEGER NOT NULL, " +
+                        "Name TEXT NOT NULL, " +
+                        "SortOrder INT DEFAULT 0, " +
+                        "CoverPath TEXT, " +
+                        "CreateDate VARCHAR(30), " +
+                        "unique(DBId, Name) " +
+                    "); " +
+                    "COMMIT;");
+                TABLES.Add("picture_collection_item",
+                    "BEGIN; " +
+                    "create table if not exists picture_collection_item( " +
+                        "id INTEGER PRIMARY KEY autoincrement, " +
+                        "CollectionID INTEGER NOT NULL, " +
+                        "ItemType VARCHAR(20) NOT NULL, " +
+                        "RefPath TEXT, " +
+                        "RefDataID INTEGER DEFAULT 0, " +
+                        "RefFID INTEGER DEFAULT 0, " +
+                        "SortOrder INT DEFAULT 0, " +
+                        "unique(CollectionID, ItemType, RefPath, RefDataID, RefFID) " +
+                    "); " +
+                    "CREATE INDEX IF NOT EXISTS picture_collection_item_idx_CollectionID ON picture_collection_item (CollectionID); " +
+                    "COMMIT;");
                 TABLES.Add("metadata_comic",
                     "BEGIN; " +
                     "create table metadata_comic( " +

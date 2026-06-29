@@ -34,6 +34,8 @@ namespace Jvedio.Core.Mapper
             builder.Append($"delete from metadata_to_actor where DataID in ({ids});");
             builder.Append($"delete from metadata_to_label where DataID in ({ids});");
             builder.Append($"delete from metadata_picture_file where DataID in ({ids});");
+            builder.Append($"delete from picture_collection_item where RefDataID in ({ids});");
+            builder.Append($"delete from picture_collection_item where RefFID in (select FID from metadata_picture_file where DataID in ({ids}));");
             builder.Append("commit;");
             MapperManager.pictureMapper.ExecuteNonQuery(builder.ToString());
         }

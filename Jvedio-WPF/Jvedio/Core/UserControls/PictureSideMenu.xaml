@@ -19,6 +19,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <super:TogglePanel
@@ -94,6 +95,26 @@
 
             <super:TogglePanel
                 Grid.Row="2"
+                Margin="1,0"
+                Padding="0,4"
+                FontSize="14"
+                Header="{DynamicResource MyPictureCollections}"
+                IsExpanded="{Binding SideCollectionExpanded, Mode=TwoWay, Source={x:Static config:ConfigManager.Main}, UpdateSourceTrigger=PropertyChanged, FallbackValue=true}"
+                IsSelected="False"
+                LineWidth="0"
+                Style="{StaticResource BaseTogglePanel}">
+                <StackPanel>
+                    <Button
+                        Margin="4,0,4,6"
+                        Click="CreateCollection_Click"
+                        Content="{DynamicResource NewPictureCollection}"
+                        Style="{StaticResource FlatButton}" />
+                    <StackPanel x:Name="collectionStackPanel" />
+                </StackPanel>
+            </super:TogglePanel>
+
+            <super:TogglePanel
+                Grid.Row="3"
                 Margin="1,0"
                 Padding="0,4"
                 FontSize="14"

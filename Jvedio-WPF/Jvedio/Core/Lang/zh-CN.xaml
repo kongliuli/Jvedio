@@ -35,4 +35,8 @@
     <sys:String x:Key="PictureSingleView">单图</sys:String>
     <sys:String x:Key="PictureAlbumView">相册</sys:String>
     <sys:String x:Key="PictureIncludeSubfolders">含子目录</sys:String>
+    <sys:String x:Key="MyPictureCollections">我的相册</sys:String>
+    <sys:String x:Key="NewPictureCollection">新建相册</sys:String>
+    <sys:String x:Key="AddToCollection">加入相册</sys:String>
+    <sys:String x:Key="RemoveFromCollection">从相册移除</sys:String>
 </ResourceDictionary>

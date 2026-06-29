@@ -76,6 +76,9 @@ namespace Jvedio.Entity
             }
         }
 
+        /// <summary>Picture 单图视图行 id（metadata_picture_file.FID）。</summary>
+        public long FID { get; set; }
+
         private string _VID;
         public string VID {
             get { return _VID; }

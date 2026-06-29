@@ -629,12 +629,18 @@ namespace Jvedio.Core.UserControls.ViewModels
                 : VideoMapper.SQL_BASE;
 
             if (pictureList) {
-                PictureListQuery.ApplyFolderScope(
-                    wrapper,
-                    ref sql,
-                    PictureBrowseContext.SelectedFolderPath,
-                    browseMode,
-                    PictureBrowseContext.IncludeSubfolders);
+                if (PictureBrowseContext.SelectedCollectionId > 0) {
+                    sql += PictureListQuery.ApplyCollectionScope(
+                        PictureBrowseContext.SelectedCollectionId,
+                        browseMode);
+                } else {
+                    PictureListQuery.ApplyFolderScope(
+                        wrapper,
+                        ref sql,
+                        PictureBrowseContext.SelectedFolderPath,
+                        browseMode,
+                        PictureBrowseContext.IncludeSubfolders);
+                }
             }
 
 

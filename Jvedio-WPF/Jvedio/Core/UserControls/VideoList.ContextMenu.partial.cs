@@ -169,6 +169,9 @@ namespace Jvedio.Core.UserControls
                     });
                 }
             }
+
+            if (ListMode == MediaListMode.Picture)
+                RefreshPictureCollectionMenus(contextMenu, video);
         }
 
         private void OpenPath(object sender, RoutedEventArgs e)

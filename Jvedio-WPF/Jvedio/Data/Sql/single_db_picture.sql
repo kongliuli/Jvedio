@@ -61,3 +61,32 @@ create table picture_folder_node(
 );
 CREATE INDEX picture_folder_node_idx_DBId_Parent ON picture_folder_node (DBId, ParentPath);
 COMMIT;
+
+-- 用户自定义相册集合（Phase D）
+drop table if exists picture_collection_item;
+drop table if exists picture_collection;
+BEGIN;
+create table picture_collection(
+    CollectionID INTEGER PRIMARY KEY autoincrement,
+    DBId INTEGER NOT NULL,
+    Name TEXT NOT NULL,
+    SortOrder INT DEFAULT 0,
+    CoverPath TEXT,
+    CreateDate VARCHAR(30),
+    unique(DBId, Name)
+);
+COMMIT;
+
+BEGIN;
+create table picture_collection_item(
+    id INTEGER PRIMARY KEY autoincrement,
+    CollectionID INTEGER NOT NULL,
+    ItemType VARCHAR(20) NOT NULL,
+    RefPath TEXT,
+    RefDataID INTEGER DEFAULT 0,
+    RefFID INTEGER DEFAULT 0,
+    SortOrder INT DEFAULT 0,
+    unique(CollectionID, ItemType, RefPath, RefDataID, RefFID)
+);
+CREATE INDEX picture_collection_item_idx_CollectionID ON picture_collection_item (CollectionID);
+COMMIT;

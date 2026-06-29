@@ -4,6 +4,7 @@ using Jvedio.Core.UI;
 using Jvedio.Core.UserControls;
 using Jvedio.Entity;
 using SuperControls.Style;
+using SuperControls.Style.Windows;
 using SuperUtils.Framework.ORM.Wrapper;
 using System;
 using System.ComponentModel;
@@ -75,14 +76,18 @@ namespace Jvedio.Core.UserControls
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
             ReloadFolderTree();
+            ReloadCollections();
             LibraryEventBus.ScanCompleted += OnScanCompleted;
             LibraryEventBus.PictureBrowseChanged += OnPictureBrowseChanged;
+            LibraryEventBus.PictureCollectionChanged += OnPictureCollectionChanged;
         }
 
         private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            if (e?.DataType == DataType.Picture)
+            if (e?.DataType == DataType.Picture) {
                 ReloadFolderTree();
+                ReloadCollections();
+            }
         }
 
         private void OnPictureBrowseChanged(object sender, PictureBrowseChangedEventArgs e)
@@ -90,6 +95,8 @@ namespace Jvedio.Core.UserControls
             if (string.IsNullOrEmpty(PictureBrowseContext.SelectedFolderPath))
                 folderTreeView?.SetValue(TreeView.SelectedItemProperty, null);
         }
+
+        private void OnPictureCollectionChanged(object sender, EventArgs e) => ReloadCollections();
 
         public void ReloadFolderTree()
         {
@@ -99,6 +106,40 @@ namespace Jvedio.Core.UserControls
             PictureFolderTreeService.PopulateTreeView(
                 folderTreeView,
                 PictureFolderTreeService.BuildForest(nodes));
+        }
+
+        public void ReloadCollections()
+        {
+            if (collectionStackPanel == null)
+                return;
+            collectionStackPanel.Children.Clear();
+            foreach (PictureCollectionSummary summary in PictureCollectionService.ListCollections(ConfigManager.Main.CurrentDBId)) {
+                var btn = new PathRadioButton {
+                    GroupName = "videoRadioButton",
+                    MainText = summary.Name,
+                    SubText = summary.ItemCount.ToString(),
+                    Tag = PictureBrowseContext.CollectionCommandPrefix + summary.CollectionID,
+                    Style = (Style)FindResource("BasePathRadioButton"),
+                    Path = (System.Windows.Media.Geometry)FindResource("GeoLabel"),
+                };
+                btn.Click += HandleSideClick;
+                collectionStackPanel.Children.Add(btn);
+            }
+        }
+
+        private void CreateCollection_Click(object sender, RoutedEventArgs e)
+        {
+            var input = new DialogInput(LangManager.GetValueByKey("NewPictureCollection"));
+            if (input.ShowDialog(App.Current.MainWindow) != true)
+                return;
+            string name = input.Text?.Trim();
+            if (string.IsNullOrEmpty(name))
+                return;
+            var created = PictureCollectionService.Create(ConfigManager.Main.CurrentDBId, name);
+            if (created == null)
+                return;
+            ReloadCollections();
+            onSideButtonCmd?.Invoke(PictureBrowseContext.CollectionCommandPrefix + created.CollectionID);
         }
 
         private void ClearRecentWatched(object sender, RoutedEventArgs e)
@@ -141,6 +182,12 @@ namespace Jvedio.Core.UserControls
             if (string.IsNullOrEmpty(text))
                 return;
             foreach (PathRadioButton item in firstStackPanel.Children.OfType<PathRadioButton>()) {
+                if (item.Tag?.ToString() == text) {
+                    item.IsChecked = true;
+                    return;
+                }
+            }
+            foreach (PathRadioButton item in collectionStackPanel.Children.OfType<PathRadioButton>()) {
                 if (item.Tag?.ToString() == text) {
                     item.IsChecked = true;
                     return;

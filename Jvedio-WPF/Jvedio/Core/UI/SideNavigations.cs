@@ -7,6 +7,7 @@ using SuperControls.Style;
 using SuperUtils.Framework.ORM.Wrapper;
 using SuperUtils.Time;
 using System;
+using System.Linq;
 using static Jvedio.App;
 
 namespace Jvedio.Core.UI
@@ -79,30 +80,46 @@ namespace Jvedio.Core.UI
                 switch (param) {
                     case "All":
                         PictureBrowseContext.ClearFolder();
+                        PictureBrowseContext.ClearCollection();
                         vm.TabItemManager.Add(TabType.GeoPicture, LangManager.GetValueByKey("AllPicture"), wrapper);
                         break;
                     case "Favorite":
                         PictureBrowseContext.ClearFolder();
+                        PictureBrowseContext.ClearCollection();
                         wrapper.Gt("metadata.Grade", 0);
                         vm.TabItemManager.Add(TabType.GeoStar, LangManager.GetValueByKey("Favorites"), wrapper);
                         break;
                     case "RecentWatch":
                         PictureBrowseContext.ClearFolder();
+                        PictureBrowseContext.ClearCollection();
                         AddRecentWatch(vm, wrapper, LangManager.GetValueByKey("RecentView"));
                         break;
                     case "Label":
                         PictureBrowseContext.ClearFolder();
+                        PictureBrowseContext.ClearCollection();
                         vm.TabItemManager.Add(TabType.GeoLabel, LangManager.GetValueByKey("Label"), LabelType.LabelName, vm.SearchText);
                         break;
                     case "Genre":
                     case "Series":
                         PictureBrowseContext.ClearFolder();
+                        PictureBrowseContext.ClearCollection();
                         if (Enum.TryParse(param, out LabelType type))
                             vm.TabItemManager.Add(TabType.GeoLabel, LangManager.GetValueByKey(param), type, vm.SearchText);
                         break;
+                    case "NewCollection":
+                        PictureBrowseContext.ClearFolder();
+                        PictureBrowseContext.ClearCollection();
+                        break;
                     default:
-                        if (PictureBrowseContext.TryParseFolderCommand(param, out string folderPath)) {
+                        if (PictureBrowseContext.TryParseCollectionCommand(param, out long collectionId)) {
+                            var summaries = PictureCollectionService.ListCollections(ConfigManager.Main.CurrentDBId);
+                            var summary = summaries.FirstOrDefault(s => s.CollectionID == collectionId);
+                            PictureBrowseContext.SetCollection(collectionId, summary?.Name);
+                            vm.TabItemManager.EnsurePictureListTab();
+                            vm.TabItemManager.RefreshPrimaryPictureLists();
+                        } else if (PictureBrowseContext.TryParseFolderCommand(param, out string folderPath)) {
                             PictureBrowseContext.SetFolder(folderPath);
+                            vm.TabItemManager.EnsurePictureListTab();
                             vm.TabItemManager.RefreshPrimaryPictureLists();
                         }
                         break;
