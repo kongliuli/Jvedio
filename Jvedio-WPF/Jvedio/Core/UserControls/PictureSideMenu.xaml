@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="Jvedio.Core.UserControls.PictureSideMenu"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -15,6 +16,7 @@
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
@@ -73,9 +75,25 @@
                 </StackPanel>
             </super:TogglePanel>
 
-
             <super:TogglePanel
                 Grid.Row="1"
+                Margin="1,0"
+                Padding="0,4"
+                FontSize="14"
+                Header="{DynamicResource PictureFolderTree}"
+                IsExpanded="{Binding SideFolderExpanded, Mode=TwoWay, Source={x:Static config:ConfigManager.Main}, UpdateSourceTrigger=PropertyChanged, FallbackValue=true}"
+                IsSelected="False"
+                LineWidth="0"
+                Style="{StaticResource BaseTogglePanel}">
+                <TreeView
+                    x:Name="folderTreeView"
+                    BorderThickness="0"
+                    FontSize="13"
+                    SelectedItemChanged="FolderTreeView_SelectedItemChanged" />
+            </super:TogglePanel>
+
+            <super:TogglePanel
+                Grid.Row="2"
                 Margin="1,0"
                 Padding="0,4"
                 FontSize="14"

@@ -1,5 +1,8 @@
 ﻿using Jvedio.Core.CustomEventArgs;
 using Jvedio.Core.Enums;
+using Jvedio.Core.Library;
+using Jvedio.Core.Media;
+using Jvedio.Core.UI;
 using Jvedio.Entity;
 using Jvedio.Entity.CommonSQL;
 using Jvedio.Mapper;
@@ -97,6 +100,8 @@ namespace Jvedio.Core.UserControls.ViewModels
         #region "属性"
         public Queue<int> PageQueue { get; set; } = new Queue<int>();
 
+
+        public MediaListMode ListMode { get; set; } = MediaListMode.Video;
 
         /// <summary>
         /// 过滤器传进的
@@ -607,9 +612,30 @@ namespace Jvedio.Core.UserControls.ViewModels
             SetSortOrder(wrapper, random);
 
             ToLimit(wrapper);
-            wrapper.Select(SelectFields);
 
-            string sql = VideoMapper.SQL_BASE;
+            bool pictureList = ListMode == MediaListMode.Picture;
+            PictureBrowseMode browseMode = pictureList
+                ? PictureBrowseContext.BrowseMode
+                : PictureBrowseMode.Album;
+            bool singleImage = pictureList && browseMode == PictureBrowseMode.SingleImage;
+
+            string[] selectFields = pictureList
+                ? PictureListQuery.ResolveSelectFields(browseMode)
+                : SelectFields;
+            wrapper.Select(selectFields);
+
+            string sql = pictureList
+                ? PictureListQuery.ResolveFromSql(browseMode)
+                : VideoMapper.SQL_BASE;
+
+            if (pictureList) {
+                PictureListQuery.ApplyFolderScope(
+                    wrapper,
+                    ref sql,
+                    PictureBrowseContext.SelectedFolderPath,
+                    browseMode,
+                    PictureBrowseContext.IncludeSubfolders);
+            }
 
 
             if (ExtraWrapper != null) {
@@ -664,9 +690,18 @@ namespace Jvedio.Core.UserControls.ViewModels
             if (wrapper == null)
                 return;
             int sortIndex = SortType;
-            if (sortIndex < 0 || sortIndex >= VieModel_VideoList.SortDict.Count)
-                sortIndex = 0;
-            string sortField = VieModel_VideoList.SortDict[sortIndex];
+            string sortField;
+            if (ListMode == MediaListMode.Picture) {
+                if (sortIndex < 0 || sortIndex >= PictureMapper.SortDict.Count)
+                    sortIndex = 0;
+                sortField = PictureMapper.SortDict[sortIndex];
+                if (PictureBrowseContext.BrowseMode == PictureBrowseMode.SingleImage && sortField == "Size")
+                    sortField = "pf.Size";
+            } else {
+                if (sortIndex < 0 || sortIndex >= VieModel_VideoList.SortDict.Count)
+                    sortIndex = 0;
+                sortField = VieModel_VideoList.SortDict[sortIndex];
+            }
             if (random)
                 wrapper.Asc("RANDOM()");
             else {
@@ -687,12 +722,20 @@ namespace Jvedio.Core.UserControls.ViewModels
             VideoList = new List<Video>();
             if (videos == null)
                 videos = new List<Video>();
-            VideoList.AddRange(videos);
+
+            bool singleImage = ListMode == MediaListMode.Picture &&
+                PictureBrowseContext.BrowseMode == PictureBrowseMode.SingleImage;
+            for (int i = 0; i < videos.Count; i++) {
+                if (singleImage && list != null && i < list.Count)
+                    PictureThumbnailHelper.HydrateSingleImageRow(videos[i], list[i]);
+                VideoList.Add(videos[i]);
+            }
+
             CurrentCount = VideoList.Count;
-            Render();
+            Render(list, singleImage);
         }
 
-        public async void Render()
+        public async void Render(List<Dictionary<string, object>> sourceRows = null, bool singleImageMode = false)
         {
             Logger.Info("1.Render");
             if (CurrentVideoList == null) {
@@ -717,7 +760,15 @@ namespace Jvedio.Core.UserControls.ViewModels
                 Video video = VideoList[i];
                 if (video == null)
                     continue;
-                Video.SetImage(ref video, ShowImageMode);
+                string picPaths = null;
+                if (!singleImageMode && sourceRows != null && i < sourceRows.Count &&
+                    sourceRows[i].TryGetValue("PicPaths", out object pp))
+                    picPaths = pp?.ToString();
+
+                if (ListMode == MediaListMode.Picture)
+                    PictureThumbnailHelper.ApplyListImage(ref video, singleImageMode, picPaths);
+                else
+                    Video.SetImage(ref video, ShowImageMode);
                 Video.SetTagStamps(ref video); // 设置标签戳
                 Video.SetTitleAndDate(ref video); // 设置标题和发行日期
                 Video.SetAsso(ref video);
@@ -752,7 +803,8 @@ namespace Jvedio.Core.UserControls.ViewModels
                     return result;
                 SelectWrapper<Video> wrapper = new SelectWrapper<Video>();
                 SetSortOrder(wrapper); // 按照当前排序
-                wrapper.Eq("metadata.DBId", ConfigManager.Main.CurrentDBId).Eq("metadata.DataType", 0);
+                wrapper.Eq("metadata.DBId", ConfigManager.Main.CurrentDBId)
+                    .Eq("metadata.DataType", (int)LibraryContext.Current.DataType);
                 SelectWrapper<Video> selectWrapper = GetSearchWrapper(searchType);
                 if (selectWrapper != null)
                     wrapper.Join(selectWrapper);

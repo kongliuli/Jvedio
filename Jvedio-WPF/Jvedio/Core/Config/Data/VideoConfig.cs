@@ -36,6 +36,9 @@ namespace Jvedio.Core.Config.Data
             ActorShowCount = true;
             BlurBackground = true;
 
+            PictureBrowseMode = 0;
+            PictureIncludeSubfolders = true;
+
         }
 
         private long _PageSize;
@@ -281,6 +284,24 @@ namespace Jvedio.Core.Config.Data
             get { return _BlurBackground; }
             set {
                 _BlurBackground = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private long _PictureBrowseMode;
+        public long PictureBrowseMode {
+            get { return _PictureBrowseMode; }
+            set {
+                _PictureBrowseMode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _PictureIncludeSubfolders = true;
+        public bool PictureIncludeSubfolders {
+            get { return _PictureIncludeSubfolders; }
+            set {
+                _PictureIncludeSubfolders = value;
                 RaisePropertyChanged();
             }
         }

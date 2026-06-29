@@ -55,12 +55,21 @@ create table if not exists picture_folder_node (
 CREATE INDEX IF NOT EXISTS picture_folder_node_idx_DBId_Parent ON picture_folder_node (DBId, ParentPath);
 ```
 
-### CONV-C — Phase C：Picture UI（目录树 + 双视图）
+### CONV-C — Phase C：Picture UI（目录树 + 双视图） `done`
 
-- [ ] 侧栏「目录」：`picture_folder_node` 树（**仅有图目录**）
-- [ ] 工具栏视图切换：**相册视图**（子文件夹） / **单图视图**（含子目录，默认；可关）
-- [ ] 选中目录节点 → 两种视图均限定该子树
-- [ ] 保留 Genre / Author 侧栏「自动分类」及 `metadata_picture` 字段
+- [x] 侧栏「目录」：`picture_folder_node` 树（**仅有图目录**）
+- [x] 工具栏视图切换：**相册视图**（子文件夹） / **单图视图**（含子目录，默认；可关）
+- [x] 选中目录节点 → 两种视图均限定该子树
+- [x] 保留 Genre / Author 侧栏「自动分类」及 `metadata_picture` 字段
+
+### CONV-F — NAS / 极空间适配（Phase C+ 设计 + 基础钩子）
+
+- [x] `NasPathHelper`：UNC/网络盘识别、极空间路径启发式、扫描建议
+- [x] 扫描入口（ScanNas/选路径）：检测 NAS 路径并提示开启目录指纹缓存
+- [x] `PictureRemoteImageService`：HTTP(S) 图片下载到本地 `Cache/PictureRemote`（远程资源预览基础）
+- [ ] 极空间 WebDAV/API 直连（需设备 API 文档）
+- [ ] Picture 列表 NAS 缩略图异步预取队列
+- [ ] 远程相册 URL 写入 `ExtraInfo` 后的批量下载任务
 
 ### CONV-D — Phase D：用户相册集合
 
@@ -151,5 +160,6 @@ create table if not exists picture_collection_item (
 
 | 日期 | 说明 |
 |------|------|
+| 2026-06-30 | Phase C：Picture 目录树侧栏 + 相册/单图双视图 + NAS 基础适配 |
 | 2026-06-30 | Phase B：Picture 目录树/单图表 + 扫描管线重写 |
 | 2026-06-30 | Phase A 完成：双库收敛（删 Game/Comics/4→5 迁移），QA-001 19/19 |

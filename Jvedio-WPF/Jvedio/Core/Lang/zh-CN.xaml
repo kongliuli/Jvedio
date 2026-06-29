@@ -31,4 +31,8 @@
     <sys:String x:Key="CrawlerServerHint">左侧是支持的信息刮削器，右侧需要自行填入刮削器对应的网址，Jvedio 不提供任何网站地址！</sys:String>
     <sys:String x:Key="AllPicture">所有图片</sys:String>
     <sys:String x:Key="RecentView">最近浏览</sys:String>
+    <sys:String x:Key="PictureFolderTree">目录</sys:String>
+    <sys:String x:Key="PictureSingleView">单图</sys:String>
+    <sys:String x:Key="PictureAlbumView">相册</sys:String>
+    <sys:String x:Key="PictureIncludeSubfolders">含子目录</sys:String>
 </ResourceDictionary>

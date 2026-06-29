@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Jvedio.Core.Scan
 {
-    internal static class PicturePathHelper
+    public static class PicturePathHelper
     {
         public static string NormalizeDir(string path)
         {
@@ -35,6 +35,17 @@ namespace Jvedio.Core.Scan
             folderPath = NormalizeDir(folderPath);
             string parent = Path.GetDirectoryName(folderPath);
             return string.IsNullOrEmpty(parent) ? null : NormalizeDir(parent);
+        }
+
+        public static string CombineFullPath(string scanRoot, string relativePath)
+        {
+            if (string.IsNullOrWhiteSpace(relativePath))
+                return NormalizeDir(scanRoot);
+            if (Path.IsPathRooted(relativePath))
+                return Path.GetFullPath(relativePath);
+            string root = NormalizeDir(Path.GetFullPath(scanRoot));
+            string rel = relativePath.Replace('/', Path.DirectorySeparatorChar);
+            return Path.GetFullPath(Path.Combine(root, rel));
         }
     }
 }

@@ -111,6 +111,7 @@
     <Compile Include="UITest\Qa001SmokeChecklistTest.cs" />
     <Compile Include="UITest\FourDataTypeAppiumSmokeTest.cs" />
     <Compile Include="UITest\MediaUIHostTest.cs" />
+    <Compile Include="UITest\PictureBrowseUiTest.cs" />
     <Compile Include="UITest\MediaListColumnPolicyTest.cs" />
     <Compile Include="UITest\StartupLibraryMappingTest.cs" />
     <Compile Include="UITest\Scan\ScanTest.cs" />

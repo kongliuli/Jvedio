@@ -362,6 +362,10 @@
     <Compile Include="Core\UI\MediaFeatureMask.cs" />
     <Compile Include="Core\UI\MediaListMode.cs" />
     <Compile Include="Core\UI\MediaListColumnPolicy.cs" />
+    <Compile Include="Core\UI\PictureBrowseContext.cs" />
+    <Compile Include="Core\UI\PictureBrowseMode.cs" />
+    <Compile Include="Core\UI\PictureFolderTreeService.cs" />
+    <Compile Include="Core\UI\PictureListQuery.cs" />
     <Compile Include="Core\UI\MediaUIHost.cs" />
     <Compile Include="Core\UI\ScanCompletionPolicy.cs" />
     <Compile Include="Core\UI\SideNavigations.cs" />
@@ -460,6 +464,7 @@
     <Compile Include="Core\Scan\IVideoScanStore.cs" />
     <Compile Include="Core\Scan\PictureScan.cs" />
     <Compile Include="Core\Scan\PictureScanIndexBuilder.cs" />
+    <Compile Include="Core\Scan\NasPathHelper.cs" />
     <Compile Include="Core\Scan\PicturePathHelper.cs" />
     <Compile Include="Core\Scan\PictureScanPipeline.cs" />
     <Compile Include="Core\Scan\ScanExtensions.cs" />
@@ -556,6 +561,8 @@
     <Compile Include="Entity\Common\MySqlite.cs" />
     <Compile Include="Core\Net\VideoDownLoader.cs" />
     <Compile Include="Core\Media\ImageSlide.cs" />
+    <Compile Include="Core\Media\PictureRemoteImageService.cs" />
+    <Compile Include="Core\Media\PictureThumbnailHelper.cs" />
     <Compile Include="Core\Media\Video.ImagePaths.partial.cs" />
     <Compile Include="Core\Media\Video.MediaInfo.partial.cs" />
     <Compile Include="Core\Media\Video.Playback.partial.cs" />

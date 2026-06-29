@@ -127,6 +127,9 @@ namespace Jvedio.Core.UserControls
 
         public void ApplyListModeColumns()
         {
+            if (vieModel != null)
+                vieModel.ListMode = ListMode;
+
             if (tableData == null || tableData.Columns.Count < MediaListColumnPolicy.ColumnCount)
                 return;
 
@@ -134,6 +137,24 @@ namespace Jvedio.Core.UserControls
                 bool visible = MediaListColumnPolicy.IsVisible(ListMode, (MediaListColumn)i);
                 SetColumnVisible(i, visible);
             }
+
+            if (pictureBrowseBar != null)
+                pictureBrowseBar.Visibility = ListMode == MediaListMode.Picture
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
+            SyncPictureBrowseToolbar();
+        }
+
+        private void SyncPictureBrowseToolbar()
+        {
+            if (ListMode != MediaListMode.Picture || pictureBrowseBar == null)
+                return;
+            if (pictureSubfolderCheckBox != null)
+                pictureSubfolderCheckBox.IsChecked = PictureBrowseContext.IncludeSubfolders;
+            if (pictureAlbumModeButton != null)
+                pictureAlbumModeButton.IsChecked = PictureBrowseContext.BrowseMode == PictureBrowseMode.Album;
+            if (pictureSingleModeButton != null)
+                pictureSingleModeButton.IsChecked = PictureBrowseContext.BrowseMode == PictureBrowseMode.SingleImage;
         }
 
         private void SetColumnVisible(int index, bool visible)
@@ -203,6 +224,10 @@ namespace Jvedio.Core.UserControls
             LibraryEventBus.MetadataRefreshed += (s, e) => {
                 if (e.DataId > 0)
                     RefreshData(e.DataId);
+            };
+            LibraryEventBus.PictureBrowseChanged += (s, e) => {
+                if (ListMode == MediaListMode.Picture)
+                    Refresh(vieModel.CurrentPage);
             };
         }
 
@@ -749,6 +774,23 @@ namespace Jvedio.Core.UserControls
             if (video == null)
                 return;
             RaiseEvent(new VideoItemEventArgs(video.DataID, OnItemClickEvent, sender));
+        }
+
+        private void PictureBrowseMode_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListMode != MediaListMode.Picture)
+                return;
+            if (sender is FrameworkElement element && element.Tag?.ToString() == "Album")
+                PictureBrowseContext.SetBrowseMode(PictureBrowseMode.Album);
+            else
+                PictureBrowseContext.SetBrowseMode(PictureBrowseMode.SingleImage);
+        }
+
+        private void PictureSubfolderCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListMode != MediaListMode.Picture || pictureSubfolderCheckBox == null)
+                return;
+            PictureBrowseContext.SetIncludeSubfolders(pictureSubfolderCheckBox.IsChecked == true);
         }
 
     }

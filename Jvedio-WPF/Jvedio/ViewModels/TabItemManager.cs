@@ -439,6 +439,14 @@ namespace Jvedio.ViewModels
             }
         }
 
+        public void RefreshPrimaryPictureLists()
+        {
+            foreach (IMediaListTab mediaList in GetAllMediaLists()) {
+                if (mediaList is VideoList videoList && videoList.ListMode == MediaListMode.Picture)
+                    videoList.Refresh();
+            }
+        }
+
         public void RefreshTab(int idx, int page)
         {
             if (idx < 0 || idx >= TabPanel.Children.Count)

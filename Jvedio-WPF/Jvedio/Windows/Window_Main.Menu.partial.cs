@@ -130,9 +130,20 @@ namespace Jvedio
         {
             string path = FileHelper.SelectPath(this);
             if (!string.IsNullOrEmpty(path)) {
+                NotifyNasScanHints(path);
                 AddScanTask(new string[] { path });
                 MessageNotify.Success($"{LangManager.GetValueByKey("AddScanTaskSuccess")} => " + path);
             }
+        }
+
+        private static void NotifyNasScanHints(string path)
+        {
+            if (!Jvedio.Core.Scan.NasPathHelper.IsNetworkPath(path))
+                return;
+            foreach (string tip in Jvedio.Core.Scan.NasPathHelper.GetScanRecommendations(path))
+                Logger.Info("[NAS] " + tip);
+            if (!ConfigManager.ScanConfig.EnableDirIndexCache)
+                MessageNotify.Info("检测到网络/NAS 路径：建议在「设置 → 扫描」中开启「目录指纹增量缓存」。");
         }
 
         private void ImportVideoByPaths(object sender, RoutedEventArgs e)

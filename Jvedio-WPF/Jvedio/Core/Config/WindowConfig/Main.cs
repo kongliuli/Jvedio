@@ -15,6 +15,7 @@ namespace Jvedio.Core.WindowConfig
             ShowSearchHistory = true;
             SideDefaultExpanded = true;
             SideClassifyExpanded = true;
+            SideFolderExpanded = true;
             SideTagStampExpanded = true;
             PaginationCombobox = true;
 
@@ -56,6 +57,7 @@ namespace Jvedio.Core.WindowConfig
         public bool ShowSearchHistory { get; set; }
         public bool SideDefaultExpanded { get; set; }
         public bool SideClassifyExpanded { get; set; }
+        public bool SideFolderExpanded { get; set; }
         public bool SideTagStampExpanded { get; set; }
 
 

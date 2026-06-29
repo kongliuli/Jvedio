@@ -78,22 +78,33 @@ namespace Jvedio.Core.UI
                 SelectWrapper<Video> wrapper = new SelectWrapper<Video>();
                 switch (param) {
                     case "All":
+                        PictureBrowseContext.ClearFolder();
                         vm.TabItemManager.Add(TabType.GeoPicture, LangManager.GetValueByKey("AllPicture"), wrapper);
                         break;
                     case "Favorite":
+                        PictureBrowseContext.ClearFolder();
                         wrapper.Gt("metadata.Grade", 0);
                         vm.TabItemManager.Add(TabType.GeoStar, LangManager.GetValueByKey("Favorites"), wrapper);
                         break;
                     case "RecentWatch":
+                        PictureBrowseContext.ClearFolder();
                         AddRecentWatch(vm, wrapper, LangManager.GetValueByKey("RecentView"));
                         break;
                     case "Label":
+                        PictureBrowseContext.ClearFolder();
                         vm.TabItemManager.Add(TabType.GeoLabel, LangManager.GetValueByKey("Label"), LabelType.LabelName, vm.SearchText);
                         break;
                     case "Genre":
                     case "Series":
+                        PictureBrowseContext.ClearFolder();
                         if (Enum.TryParse(param, out LabelType type))
                             vm.TabItemManager.Add(TabType.GeoLabel, LangManager.GetValueByKey(param), type, vm.SearchText);
+                        break;
+                    default:
+                        if (PictureBrowseContext.TryParseFolderCommand(param, out string folderPath)) {
+                            PictureBrowseContext.SetFolder(folderPath);
+                            vm.TabItemManager.RefreshPrimaryPictureLists();
+                        }
                         break;
                 }
             }

@@ -159,6 +159,10 @@ namespace Jvedio.Core.Library
         public bool Visible { get; }
     }
 
+    public sealed class PictureBrowseChangedEventArgs : EventArgs
+    {
+    }
+
     public static class LibraryEventBus
     {
         public static event EventHandler<ScanCompletedEventArgs> ScanCompleted;
@@ -176,6 +180,7 @@ namespace Jvedio.Core.Library
         public static event EventHandler<TabFocusEventArgs> TabFocusChanged;
         public static event EventHandler<SearchingChangedEventArgs> SearchingChanged;
         public static event EventHandler<WaitingChangedEventArgs> WaitingChanged;
+        public static event EventHandler<PictureBrowseChangedEventArgs> PictureBrowseChanged;
 
         public static void RaiseScanCompleted(ScanJobBase scanJob, DataType dataType)
         {
@@ -260,6 +265,11 @@ namespace Jvedio.Core.Library
         public static void RaiseWaitingChanged(string message, bool visible)
         {
             WaitingChanged?.Invoke(null, new WaitingChangedEventArgs(message, visible));
+        }
+
+        public static void RaisePictureBrowseChanged()
+        {
+            PictureBrowseChanged?.Invoke(null, new PictureBrowseChangedEventArgs());
         }
     }
 }

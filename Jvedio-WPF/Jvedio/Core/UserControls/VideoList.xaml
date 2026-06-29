@@ -320,6 +320,41 @@
                     Data="{StaticResource GeoRandom}"
                     ToolTip="{DynamicResource ToolTip_RandomShow}" />
 
+                <Border
+                    x:Name="pictureBrowseBar"
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource Window.Side.Background}"
+                    CornerRadius="5"
+                    Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <super:PathRadioButton
+                            x:Name="pictureSingleModeButton"
+                            Padding="6,2"
+                            CornerRadius="3,0,0,3"
+                            GroupName="pictureBrowseMode"
+                            MainText="{DynamicResource PictureSingleView}"
+                            Style="{StaticResource BasePathRadioButton}"
+                            Tag="Single"
+                            Click="PictureBrowseMode_Click" />
+                        <super:PathRadioButton
+                            x:Name="pictureAlbumModeButton"
+                            Padding="6,2"
+                            CornerRadius="0,3,3,0"
+                            GroupName="pictureBrowseMode"
+                            MainText="{DynamicResource PictureAlbumView}"
+                            Style="{StaticResource BasePathRadioButton}"
+                            Tag="Album"
+                            Click="PictureBrowseMode_Click" />
+                        <CheckBox
+                            x:Name="pictureSubfolderCheckBox"
+                            Margin="8,0,4,0"
+                            VerticalAlignment="Center"
+                            Content="{DynamicResource PictureIncludeSubfolders}"
+                            Click="PictureSubfolderCheckBox_Click" />
+                    </StackPanel>
+                </Border>
+
 
                 <Border
                     VerticalAlignment="Center"

@@ -1,4 +1,5 @@
 using Jvedio.Mapper;
+using Jvedio.Core.Library;
 using SuperUtils.Framework.ORM.Wrapper;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +15,7 @@ namespace Jvedio.Entity
         {
             SelectWrapper<Video> wrapper = new SelectWrapper<Video>();
             wrapper.Eq("metadata.DBId", ConfigManager.Main.CurrentDBId)
-                .Eq("metadata.DataType", 0);
+                .Eq("metadata.DataType", (int)LibraryContext.Current.DataType);
             return wrapper;
         }
 

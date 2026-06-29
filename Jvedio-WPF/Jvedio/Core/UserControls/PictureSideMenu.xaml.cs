@@ -1,4 +1,5 @@
 using Jvedio.Core.Enums;
+using Jvedio.Core.Library;
 using Jvedio.Core.UI;
 using Jvedio.Core.UserControls;
 using Jvedio.Entity;
@@ -73,6 +74,31 @@ namespace Jvedio.Core.UserControls
         {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
+            ReloadFolderTree();
+            LibraryEventBus.ScanCompleted += OnScanCompleted;
+            LibraryEventBus.PictureBrowseChanged += OnPictureBrowseChanged;
+        }
+
+        private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
+        {
+            if (e?.DataType == DataType.Picture)
+                ReloadFolderTree();
+        }
+
+        private void OnPictureBrowseChanged(object sender, PictureBrowseChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(PictureBrowseContext.SelectedFolderPath))
+                folderTreeView?.SetValue(TreeView.SelectedItemProperty, null);
+        }
+
+        public void ReloadFolderTree()
+        {
+            if (folderTreeView == null)
+                return;
+            var nodes = PictureFolderTreeService.LoadNodes(ConfigManager.Main.CurrentDBId);
+            PictureFolderTreeService.PopulateTreeView(
+                folderTreeView,
+                PictureFolderTreeService.BuildForest(nodes));
         }
 
         private void ClearRecentWatched(object sender, RoutedEventArgs e)
@@ -100,6 +126,14 @@ namespace Jvedio.Core.UserControls
         {
             if (sender is FrameworkElement element && element.Tag != null)
                 onSideButtonCmd?.Invoke(element.Tag.ToString());
+        }
+
+        private void FolderTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.NewValue == null)
+                return;
+            if (e.NewValue is TreeViewItem item && item.Tag is string path && !string.IsNullOrWhiteSpace(path))
+                onSideButtonCmd?.Invoke(PictureBrowseContext.FolderCommandPrefix + path);
         }
 
         public void SetSelected(string text)
