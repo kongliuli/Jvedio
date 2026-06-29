@@ -14,7 +14,7 @@ namespace Jvedio.Core.Scan
     public interface IPictureScanStore
     {
         List<Picture> LoadExisting();
-        void Persist(ImportClassification<Picture> classification, ScanResult scanResult, DataType dataType);
+        void Persist(ImportClassification<Picture> classification, ScanResult scanResult, DataType dataType, PictureScanSidecar sidecar);
     }
 
     internal sealed class MapperPictureScanStore : IPictureScanStore
@@ -27,7 +27,11 @@ namespace Jvedio.Core.Scan
             return pictureMapper.ToEntity<Picture>(list, typeof(Picture).GetProperties(), false);
         }
 
-        public void Persist(ImportClassification<Picture> classification, ScanResult scanResult, DataType dataType)
+        public void Persist(
+            ImportClassification<Picture> classification,
+            ScanResult scanResult,
+            DataType dataType,
+            PictureScanSidecar sidecar)
         {
             foreach (var kv in classification.NotImport)
                 scanResult.NotImport[kv.Key] = kv.Value;
@@ -50,31 +54,81 @@ namespace Jvedio.Core.Scan
             }
 
             List<MetaData> toInsertData = toInsert.Select(arg => arg.toMetaData()).ToList();
-            if (toInsertData.Count <= 0)
+            if (toInsertData.Count > 0) {
+                long.TryParse(metaDataMapper.InsertAndGetID(toInsertData[0]).ToString(), out long before);
+                toInsertData.RemoveAt(0);
+                try {
+                    metaDataMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
+                    metaDataMapper.InsertBatch(toInsertData);
+                } catch (System.Exception ex) {
+                    Logger.Error(ex.Message);
+                } finally {
+                    metaDataMapper.ExecuteNonQuery("END TRANSACTION;");
+                }
+
+                long nextId = before;
+                foreach (Picture data in toInsert) {
+                    data.DataID = nextId;
+                    nextId++;
+                }
+
+                try {
+                    pictureMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
+                    pictureMapper.InsertBatch(toInsert);
+                } catch (System.Exception ex) {
+                    Logger.Error(ex.Message);
+                } finally {
+                    pictureMapper.ExecuteNonQuery("END TRANSACTION;");
+                }
+            }
+
+            var affected = new List<Picture>();
+            affected.AddRange(classification.ToInsert);
+            affected.AddRange(classification.ToUpdate);
+            SyncSidecar(sidecar, affected);
+        }
+
+        private static void SyncSidecar(PictureScanSidecar sidecar, List<Picture> affectedAlbums)
+        {
+            if (sidecar == null)
                 return;
-            long.TryParse(metaDataMapper.InsertAndGetID(toInsertData[0]).ToString(), out long before);
-            toInsertData.RemoveAt(0);
-            try {
-                metaDataMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
-                metaDataMapper.InsertBatch(toInsertData);
-            } catch (System.Exception ex) {
-                Logger.Error(ex.Message);
-            } finally {
-                metaDataMapper.ExecuteNonQuery("END TRANSACTION;");
+
+            long dbId = ConfigManager.Main.CurrentDBId;
+            if (sidecar.FolderNodes.Count > 0 && sidecar.ScannedRoots.Count > 0) {
+                string roots = string.Join(",", sidecar.ScannedRoots
+                    .Select(r => $"'{r.Replace("'", "''")}'"));
+                pictureFolderNodeMapper.ExecuteNonQuery(
+                    $"DELETE FROM picture_folder_node WHERE DBId={dbId} AND ScanRoot IN ({roots})");
+                pictureFolderNodeMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
+                try {
+                    pictureFolderNodeMapper.InsertBatch(sidecar.FolderNodes);
+                } finally {
+                    pictureFolderNodeMapper.ExecuteNonQuery("END TRANSACTION;");
+                }
             }
 
-            foreach (Picture data in toInsert) {
-                data.DataID = before;
-                before++;
-            }
+            if (affectedAlbums == null || sidecar.FilesByAlbumPath.Count == 0)
+                return;
 
-            try {
-                pictureMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
-                pictureMapper.InsertBatch(toInsert);
-            } catch (System.Exception ex) {
-                Logger.Error(ex.Message);
-            } finally {
-                pictureMapper.ExecuteNonQuery("END TRANSACTION;");
+            foreach (Picture album in affectedAlbums) {
+                if (album.DataID <= 0)
+                    continue;
+                if (!sidecar.FilesByAlbumPath.TryGetValue(album.Path, out List<PictureFile> files) || files == null)
+                    continue;
+
+                pictureFileMapper.ExecuteNonQuery(
+                    $"DELETE FROM metadata_picture_file WHERE DataID={album.DataID}");
+                foreach (PictureFile file in files)
+                    file.DataID = album.DataID;
+
+                if (files.Count == 0)
+                    continue;
+                pictureFileMapper.ExecuteNonQuery("BEGIN TRANSACTION;");
+                try {
+                    pictureFileMapper.InsertBatch(files);
+                } finally {
+                    pictureFileMapper.ExecuteNonQuery("END TRANSACTION;");
+                }
             }
         }
     }

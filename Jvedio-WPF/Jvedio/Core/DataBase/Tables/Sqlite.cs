@@ -386,6 +386,37 @@ namespace Jvedio.Core.DataBase.Tables
                     "); " +
                     "CREATE INDEX metadata_picture_idx_DataID_PID ON metadata_picture (DataID,PID); " +
                     "COMMIT;");
+                TABLES.Add("metadata_picture_file",
+                    "BEGIN; " +
+                    "create table if not exists metadata_picture_file( " +
+                        "FID INTEGER PRIMARY KEY autoincrement, " +
+                        "DataID INTEGER NOT NULL, " +
+                        "RelativePath TEXT NOT NULL, " +
+                        "FileName TEXT, " +
+                        "Size INTEGER DEFAULT 0, " +
+                        "Hash VARCHAR(32), " +
+                        "Width INT DEFAULT 0, " +
+                        "Height INT DEFAULT 0, " +
+                        "ExtraInfo TEXT, " +
+                        "unique(DataID, RelativePath) " +
+                    "); " +
+                    "CREATE INDEX IF NOT EXISTS metadata_picture_file_idx_DataID ON metadata_picture_file (DataID); " +
+                    "COMMIT;");
+                TABLES.Add("picture_folder_node",
+                    "BEGIN; " +
+                    "create table if not exists picture_folder_node( " +
+                        "NodeID INTEGER PRIMARY KEY autoincrement, " +
+                        "DBId INTEGER NOT NULL, " +
+                        "ScanRoot TEXT NOT NULL, " +
+                        "FullPath TEXT NOT NULL, " +
+                        "ParentPath TEXT, " +
+                        "Name TEXT, " +
+                        "Depth INT DEFAULT 0, " +
+                        "HasImages INT DEFAULT 1, " +
+                        "unique(DBId, FullPath) " +
+                    "); " +
+                    "CREATE INDEX IF NOT EXISTS picture_folder_node_idx_DBId_Parent ON picture_folder_node (DBId, ParentPath); " +
+                    "COMMIT;");
                 TABLES.Add("metadata_comic",
                     "BEGIN; " +
                     "create table metadata_comic( " +

@@ -33,6 +33,7 @@ namespace Jvedio.Core.Mapper
             builder.Append($"delete from metadata_to_tagstamp where DataID in ({ids});");
             builder.Append($"delete from metadata_to_actor where DataID in ({ids});");
             builder.Append($"delete from metadata_to_label where DataID in ({ids});");
+            builder.Append($"delete from metadata_picture_file where DataID in ({ids});");
             builder.Append("commit;");
             MapperManager.pictureMapper.ExecuteNonQuery(builder.ToString());
         }

@@ -94,6 +94,7 @@
     <Compile Include="ScanTest\ScanOptimizationTest.cs" />
     <Compile Include="ScanTest\ScanResultDiscoverTest.cs" />
     <Compile Include="ScanTest\Wave9ScanMetadataTest.cs" />
+    <Compile Include="ScanTest\PictureScanIndexBuilderTest.cs" />
     <Compile Include="ScanTest\ScanPipelineHelperTest.cs" />
     <Compile Include="MetadataTest\MetadataLookupCacheTest.cs" />
     <Compile Include="MetadataTest\MetadataScrapeServiceTest.cs" />

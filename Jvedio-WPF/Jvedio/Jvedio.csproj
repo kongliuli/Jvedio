@@ -459,6 +459,8 @@
     <Compile Include="Core\Scan\IPictureScanStore.cs" />
     <Compile Include="Core\Scan\IVideoScanStore.cs" />
     <Compile Include="Core\Scan\PictureScan.cs" />
+    <Compile Include="Core\Scan\PictureScanIndexBuilder.cs" />
+    <Compile Include="Core\Scan\PicturePathHelper.cs" />
     <Compile Include="Core\Scan\PictureScanPipeline.cs" />
     <Compile Include="Core\Scan\ScanExtensions.cs" />
     <Compile Include="Core\Scan\ScanFactory.cs" />
@@ -503,6 +505,8 @@
     <Compile Include="Entity\CommonSQL\TagStamp.cs" />
     <Compile Include="Entity\Data\MetaData.cs" />
     <Compile Include="Entity\Data\Picture.cs" />
+    <Compile Include="Entity\Data\PictureFile.cs" />
+    <Compile Include="Entity\Data\PictureFolderNode.cs" />
     <Compile Include="Entity\Data\UrlCode.cs" />
     <Compile Include="Entity\Data\Video.cs" />
     <Compile Include="Entity\Common\DetailMovie.cs" />
@@ -536,6 +540,8 @@
     <Compile Include="Mapper\Common\TranslationMapper.cs" />
     <Compile Include="Mapper\Common\UrlCodeMapper.cs" />
     <Compile Include="Mapper\Common\PictureMapper.cs" />
+    <Compile Include="Mapper\Common\PictureFileMapper.cs" />
+    <Compile Include="Mapper\Common\PictureFolderNodeMapper.cs" />
     <Compile Include="Mapper\Common\VideoMapper.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

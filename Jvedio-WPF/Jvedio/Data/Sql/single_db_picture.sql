@@ -27,25 +27,37 @@ create table metadata_picture(
 CREATE INDEX metadata_picture_idx_DataID_PID ON metadata_picture (DataID,PID);
 COMMIT;
 
--- -- 只有图片会记录详细信息
--- drop table if exists metadata_picture_fileinfo;
--- BEGIN;
--- create table metadata_picture_fileinfo(
---     FID INTEGER PRIMARY KEY autoincrement,
---     PID INTEGER,
---     FileName VARCHAR(3000),
---     Dir VARCHAR(3000),
---     Size INTEGER,
---     Ext VARCHAR(100),
---     FileCreateDate VARCHAR(30),
---     FileUpdateDate VARCHAR(30),
---     Hash  VARCHAR(32),
---     Width INT,
---     Height INT,
---     ExtraInfo TEXT,
---     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
---     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
---     unique(DataID,VID)
--- );
--- CREATE INDEX metadata_picture_fileinfo_PID ON metadata_picture_fileinfo (DataID,PID);
--- COMMIT;
+-- 单图明细（RelativePath 相对 ScanRoot）
+drop table if exists metadata_picture_file;
+BEGIN;
+create table metadata_picture_file(
+    FID INTEGER PRIMARY KEY autoincrement,
+    DataID INTEGER NOT NULL,
+    RelativePath TEXT NOT NULL,
+    FileName TEXT,
+    Size INTEGER DEFAULT 0,
+    Hash VARCHAR(32),
+    Width INT DEFAULT 0,
+    Height INT DEFAULT 0,
+    ExtraInfo TEXT,
+    unique(DataID, RelativePath)
+);
+CREATE INDEX metadata_picture_file_idx_DataID ON metadata_picture_file (DataID);
+COMMIT;
+
+-- 仅有图目录的文件夹树（Phase B）
+drop table if exists picture_folder_node;
+BEGIN;
+create table picture_folder_node(
+    NodeID INTEGER PRIMARY KEY autoincrement,
+    DBId INTEGER NOT NULL,
+    ScanRoot TEXT NOT NULL,
+    FullPath TEXT NOT NULL,
+    ParentPath TEXT,
+    Name TEXT,
+    Depth INT DEFAULT 0,
+    HasImages INT DEFAULT 1,
+    unique(DBId, FullPath)
+);
+CREATE INDEX picture_folder_node_idx_DBId_Parent ON picture_folder_node (DBId, ParentPath);
+COMMIT;

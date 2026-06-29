@@ -15,12 +15,12 @@
 - [x] 启动页只保留 Video / Picture；老库 `DataType=2/3` 不展示（`ResolveDataType` 回退侧栏索引）
 - [x] 测试改为双库冒烟（QA-001 19/19 通过）
 
-### CONV-B — Phase B：Picture 存储（目录树 + 单图）
+### CONV-B — Phase B：Picture 存储（目录树 + 单图） `done`
 
-- [ ] 启用/扩展 `metadata_picture_file`（单图明细，`RelativePath` 完整相对路径）
-- [ ] 新增 `picture_folder_node`（仅有图目录入树：`FullPath / ParentPath / ScanRootId / Depth`）
-- [ ] 重写 `PictureScanPipeline`：按有图文件夹 upsert FolderAlbum + 单图 file 行
-- [ ] 废弃 `PicPaths` 逗号拼接（只读兼容一期，扫描写 file 表）
+- [x] 启用/扩展 `metadata_picture_file`（单图明细，`RelativePath` 相对 ScanRoot）
+- [x] 新增 `picture_folder_node`（仅有图目录入树）
+- [x] 重写 `PictureScanPipeline`：按有图文件夹 upsert FolderAlbum + 单图 file 行
+- [x] `PicPaths` 仍写入文件名列表（兼容旧 UI；新数据以 file 表为准）
 
 **DDL 草案（`single_db_picture.sql` 追加）：**
 
@@ -151,5 +151,5 @@ create table if not exists picture_collection_item (
 
 | 日期 | 说明 |
 |------|------|
+| 2026-06-30 | Phase B：Picture 目录树/单图表 + 扫描管线重写 |
 | 2026-06-30 | Phase A 完成：双库收敛（删 Game/Comics/4→5 迁移），QA-001 19/19 |
-| 2026-06-30 | 双库收敛方案写入 BACKLOG；Picture B–D 待实施 |
